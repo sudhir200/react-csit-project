@@ -6,6 +6,7 @@ import Users from "./components/userDashboard/users";
 import Header1 from "./commonComponents/header/header";
 import UserAdd from "./components/user/userAdd";
 import CountryCard from "./commonComponents/commonCard/countryCard";
+import GetCountryByName from "./components/country/countryByName";
 
 class Routes extends Component {
     render() {
@@ -19,7 +20,7 @@ class Routes extends Component {
                             <Route exact path="/" component={Home}/>
                             <Route exact path="/about" component={About}/>
                             <Route exact path="/user/add" component={UserAdd}/>
-                            <Route exact path="/country/:id" component={CountryCard}/>
+                            <Route exact path="/country/:name" component={GetCountryByName}/>
                             <Route exact path="/user/:userId/course/:courseId" component={Users}/>
                         </Switch>
                         :

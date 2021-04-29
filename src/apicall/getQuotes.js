@@ -14,13 +14,13 @@ export function getCountries()
             })
     })
 }
-export function getCountryById()
+export function getCountryById(name)
 {
     return new Promise(function (resolve, reject){
         axios({
             method:"get",
-            url:"https://restcountries.eu/rest/v2/all"
-        }).then(r=>resolve(r))
+            url:`https://restcountries.eu/rest/v2/name/${name}`
+        }).then(r=>resolve(r.data))
             .catch(err=> {
 
                 reject(err)

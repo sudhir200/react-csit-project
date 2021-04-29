@@ -3,6 +3,7 @@ import {getCountries} from "../../apicall/getQuotes";
 import {Card} from "antd";
 import "./style.css"
 import CountryCard from "../../commonComponents/commonCard/countryCard";
+import {Link} from "react-router-dom";
 
 class Home extends Component {
     constructor() {
@@ -34,11 +35,19 @@ class Home extends Component {
         const {countries} = this.state;
         return (
             <div>
+                <div style={{margin:"20px 0"}} align="center">
+
+                    <input style={{width:500,height:50,borderRadius:20,border:"1px solid blue"}} type="text"/>
+                </div>
                 <div className="countryWrapper" style={{margin: 100}}>
                     {/*<QuoteCard quote="hello this is a quote" quoteHeader="quote in home page"/>*/}
                     {
                         countries.map((country,index) =>
-                            <CountryCard key={index} country={country}/>)
+                            <Link to={`/country/${country.name}`}>
+                                <CountryCard key={index} country={country}/>
+                            </Link>
+
+                            )
                     }
                 </div>
             </div>

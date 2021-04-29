@@ -22,7 +22,7 @@
 }
 .commonTag
 {
-    width: 100px;
+    width: fit-content;
     margin:5px 0 !important;
 
 }
