@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Routes from "./routes";
+import 'antd/dist/antd.css';
 
 class App extends Component {
     constructor(props, context) {

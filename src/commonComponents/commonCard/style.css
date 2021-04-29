@@ -1,0 +1,41 @@
+.countryImg
+{
+    width: 200px;
+    height: 200px;
+}
+.countryCard1
+{
+    padding: 20px;
+    height: auto;
+    max-width: 400px;
+    border-radius: 20px;
+    box-shadow: #61dafb;
+    background: #61dafb;
+
+}
+.countryTitle
+{
+    font-size: 20px;
+    line-height: 20px;
+    font-weight: bold;
+
+}
+.commonTag
+{
+    width: 100px;
+    margin:5px 0 !important;
+
+}
+.wrapperDiv
+{
+    margin:20px 0;
+}
+.displayFlex
+{
+    display: flex;
+    justify-content: space-between;
+}
+.displayGrid
+{
+    display: grid;
+}
