@@ -1,0 +1,14 @@
+.countryWrapper
+{
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    grid-gap: 10px;
+    column-gap: 10px;
+}
+.countryCard
+{
+    background: #99B1F0;
+    padding: 20px;
+    display: block;
+    text-align: center;
+}
