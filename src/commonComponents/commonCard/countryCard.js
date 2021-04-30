@@ -8,11 +8,9 @@ class CountryCard extends Component {
         this.state = {
             country: this.props.country
         }
-        console.log(this.props.country)
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-        console.log(nextProps)
         this.setState({country: nextProps.country})
     }
 
@@ -27,8 +25,8 @@ class CountryCard extends Component {
                     <div className="wrapperDiv displayGrid">
                         <div className="displayFlex">
                             <div className="displayGrid">
-                                <span className="countryTitle">Afghanistan, AF</span>
-                                <span>Kabul</span>
+                                <span className="countryTitle">{this.state.country.name}</span>
+                                <span>{this.state.country.capital}</span>
                             </div>
                             <div>
                                 <div className="displayGrid">{this.state.country.latlng.map(item =>

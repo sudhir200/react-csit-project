@@ -12,3 +12,21 @@
     display: block;
     text-align: center;
 }
+.searchInput
+{
+    outline: none !important;
+    padding: 10px 15px !important;
+    font-size: 18px !important;
+    /*border: 1px solid #61dafb;*/
+    color: #99B1F0 !important;
+    font-weight: 500 !important;
+}
+.searchIcon
+{
+    margin-left: 10px;
+}
+.searchIcon:hover
+{
+    transform: scale(1.5);
+    opacity: 2;
+}
