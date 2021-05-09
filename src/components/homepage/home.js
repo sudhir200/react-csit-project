@@ -74,8 +74,9 @@ class Home extends Component {
             <div>
                 <div style={{margin: "20px 0"}} align="center">
                     <div align="center" style={{display: "inherit"}}>
-
-                        <input  onMouseOver={()=>message.warn('search by country name')} onMouseOut={()=>message.warn('removed mouse')} onKeyPress={(event)=>{this.handleEnter(event)}} style={{width: 500, height: 50, borderRadius: 20}} name="searchKey"
+                        {/*onMouseOver={()=>message.warn('search by country name')} onMouseOut={()=>message.warn('removed mouse')}*/}
+                        {/*onKeyPress={(event)=>{this.handleEnter(event)}}*/}
+                        <input    style={{width: 500, height: 50, borderRadius: 20}} name="searchKey"
                                value={this.state.searchKey} onInput={event => this.handleChange(event)}
                                className="searchInput" type="text"/>
                         {/*<Search  className="searchInput" style={{width:500,height:50,borderRadius:20}}  />*/}
@@ -86,18 +87,12 @@ class Home extends Component {
 
                 <div className="countryWrapper" style={{margin: 100}}>
 
-                    {this.state.searchCountries.length ?
-                        searchCountries.map((country, index) =>
-                            <Link to={`/country/${country.name}`}>
-                                <CountryCard key={index} country={country}/>
-                            </Link>
-                        ) :
-                        countries.map((country, index) =>
+                    {
+                        countries.filter(country => this.state.searchKey?country.name.toUpperCase().includes(this.state.searchKey.toUpperCase()):country).map((country, index) =>
                             <Link to={`/country/${country.name}`}>
                                 <CountryCard key={index} country={country}/>
                             </Link>
                         )
-
                     }
                     {/*<QuoteCard quote="hello this is a quote" quoteHeader="quote in home page"/>*/}
                 </div>

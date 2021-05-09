@@ -14,7 +14,6 @@ class Routes extends Component {
             <div>
                 <Router>
                     <Header1 isLogin={false}/>
-
                     {this.props.isLogin ?
                         <Switch>
                             <Route exact path="/" component={Home}/>

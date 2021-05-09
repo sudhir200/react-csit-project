@@ -10,9 +10,10 @@ class Header1 extends Component {
                 <div className="header-top">
                     <div>
                         <SmileOutlined style={{fontSize:30,color:"#fefefe"}} className="logoIcon" />
-                        <span className="titleText" >Happy Quotes</span>
+                        <span className="titleText" >CSIT LECTURE</span>
                         <Link style={{textDecoration:"none"}} to={"/"}><span className="titleText item">home</span> </Link>
                         <Link style={{textDecoration:"none"}} to={"/about"}><span className="titleText item">About</span> </Link>
+                        <Link style={{textDecoration:"none"}} to={"/todo"}><span className="titleText item">TO-DO list</span> </Link>
                         {!this.props.isLogin?'Logout':'Login'}
                     </div>
                 </div>
