@@ -61,8 +61,8 @@ class App extends Component {
     render() {
         const {element,isLogin}=this.state;
         return (
-            <div align="center">
-                <FileOne/>
+            <div>
+                <Routes isLogin={this.state.isLogin}/>
             </div>
         );
     }

@@ -31,7 +31,7 @@ class Home extends Component {
             console.log(r)
             this.setState({countries: r.data})
         }).catch(err => {
-
+            message.error('Error')
             console.log(err)
         });
     }
@@ -86,9 +86,8 @@ class Home extends Component {
                 </div>
 
                 <div className="countryWrapper" style={{margin: 100}}>
-
-                    {
-                        countries.filter(country => this.state.searchKey?country.name.toUpperCase().includes(this.state.searchKey.toUpperCase()):country).map((country, index) =>
+                    {/*filter(country => this.state.searchKey?country.name.toUpperCase().includes(this.state.searchKey.toUpperCase()):country)*/}
+                    {countries.map((country, index) =>
                             <Link to={`/country/${country.name}`}>
                                 <CountryCard key={index} country={country}/>
                             </Link>

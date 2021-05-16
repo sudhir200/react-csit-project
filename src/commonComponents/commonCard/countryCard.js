@@ -29,8 +29,10 @@ class CountryCard extends Component {
                                 <span>{this.state.country.capital}</span>
                             </div>
                             <div>
-                                <div className="displayGrid">{this.state.country.latlng.map(item =>
-                                    <span>{item}</span>)}</div>
+                                <div className="displayGrid">
+                                    {this.state.country.latlng.map(item =>
+                                    <span>{item}</span>)}
+                                </div>
 
                             </div>
                         </div>
@@ -40,8 +42,9 @@ class CountryCard extends Component {
                     </div>
                     <div className="wrapperDiv" style={{display: "grid"}}>
                         <span className="countryTitle">Languages</span>
-                        {this.state.country.languages.map((lang) => <Tag className="commonTag"
-                                                                         color="blue">{lang.name}</Tag>)}
+                        {this.state.country.languages.map((lang) =>
+                            <Tag className="commonTag" color="blue">{lang.name}</Tag>
+                        )}
 
                     </div>
                 </Card> : ''}
