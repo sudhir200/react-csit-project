@@ -4,19 +4,21 @@ import "./style.css"
 import CountryCard from "../../commonComponents/commonCard/countryCard";
 import {Link} from "react-router-dom";
 import {SearchOutlined} from "@ant-design/icons"
-import {message} from "antd";
+import {Card, message} from "antd";
 
 class Home extends Component {
     constructor() {
         super();
         this.state = {
-            countries: [],
+            countries: localStorage.getItem('countries-list')?JSON.parse(localStorage.getItem('countries-list')).data:[],
             searchCountries: [],
+            customArray: ["RAM","Shyam","hari","hariram","RAM2","RAM3","RAM4",],
             searchKey: '',
         }
     }
 
     componentDidMount() {
+        console.log('componentDidMount...')
         this.getAllCountries()
     }
 
@@ -27,13 +29,25 @@ class Home extends Component {
         }
     }
     getAllCountries = () => {
-        getCountries().then(r => {
-            console.log(r)
-            this.setState({countries: r.data})
-        }).catch(err => {
-            message.error('Error')
-            console.log(err)
-        });
+        console.log('getAllCountries...')
+        if(this.state.countries.length>0)
+        {
+            getCountries().then(r => {
+                console.log('success...')
+
+                console.log(r)
+                localStorage.setItem('countries-list',JSON.stringify(r))
+
+                // this.setState({countries: r.data})
+            }).catch(err => {
+                console.log('error...')
+
+                message.error('Error')
+                console.log(err)
+            });
+        }
+
+
     }
     getCountryByName = () => {
         console.log(this.state.countries)
@@ -84,15 +98,27 @@ class Home extends Component {
                                         style={{fontSize: 20, cursor: "pointer"}}/>
                     </div>
                 </div>
-
-                <div className="countryWrapper" style={{margin: 100}}>
-                    {/*filter(country => this.state.searchKey?country.name.toUpperCase().includes(this.state.searchKey.toUpperCase()):country)*/}
-                    {countries.map((country, index) =>
-                            <Link to={`/country/${country.name}`}>
-                                <CountryCard key={index} country={country}/>
-                            </Link>
-                        )
+                <div align="center">
+                    {/*array-to-map--------.map(actualmethod)..(name-user defined var),=><div></div>)*/}
+                    {this.state.customArray.map((name,index)=><div>{index+1} {name}</div>)}
+                </div>
+                <div className="countryWrapper" style={{gridTemplateColumns:"repeat(5,1fr)",margin: 100}}>
+                    <Card style={{textAlign:"center",display:"block",height:100,color:"darkblue",fontWeight:"bolder"}}>
+                       <span>Number of Countries: </span><br/>
+                       <span>{countries.length}</span>
+                    </Card>
+                    {countries.map((country,index)=>
+                        <CountryCard key={index} country={country}/>)
                     }
+
+                    {/*filter(country => this.state.searchKey?country.name.toUpperCase().includes(this.state.searchKey.toUpperCase()):country)*/}
+                    {/*{countries.map((country, index) =>*/}
+                    {/*        <Link to={`/country/${country.name}`}>*/}
+                    {/*            {index}*/}
+                    {/*            <CountryCard key={index} country={country}/>*/}
+                    {/*        </Link>*/}
+                    {/*    )*/}
+                    {/*}*/}
                     {/*<QuoteCard quote="hello this is a quote" quoteHeader="quote in home page"/>*/}
                 </div>
             </div>

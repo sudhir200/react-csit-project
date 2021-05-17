@@ -1,12 +1,17 @@
 import axios from "axios";
 
 export function getCountries() {
+    console.log('api init')
     return new Promise(function (resolve, reject) {
         axios({
             method:"get",
             url:"https://restcountries.eu/rest/v2/all"
-        }).then(r=>resolve(r))
+        }).then(r=> {
+            console.log('api success')
+            resolve(r)
+        })
             .catch(err=> {
+                console.log('api failed')
 
                 reject(err)
             })
