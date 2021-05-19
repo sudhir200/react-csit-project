@@ -5,12 +5,13 @@ import CountryCard from "../../commonComponents/commonCard/countryCard";
 import {Link} from "react-router-dom";
 import {SearchOutlined} from "@ant-design/icons"
 import {Card, message} from "antd";
+import QuoteCard from "../../commonComponents/quoteCard/quoteCard";
 
 class Home extends Component {
     constructor() {
         super();
         this.state = {
-            countries: localStorage.getItem('countries-list')?JSON.parse(localStorage.getItem('countries-list')).data:[],
+            countries: localStorage.getItem('countries-list')?JSON.parse(localStorage.getItem('countries-list')):[],
             searchCountries: [],
             customArray: ["RAM","Shyam","hari","hariram","RAM2","RAM3","RAM4",],
             searchKey: '',
@@ -29,14 +30,15 @@ class Home extends Component {
         }
     }
     getAllCountries = () => {
+
         console.log('getAllCountries...')
-        if(this.state.countries.length>0)
+        if(!this.state.countries.length>0)
         {
             getCountries().then(r => {
                 console.log('success...')
 
                 console.log(r)
-                localStorage.setItem('countries-list',JSON.stringify(r))
+                localStorage.setItem('countries-list',JSON.stringify(r.data))
 
                 // this.setState({countries: r.data})
             }).catch(err => {
@@ -81,11 +83,16 @@ class Home extends Component {
             this.getCountryByName();
         }
     }
-
+    updateList=()=>
+    {
+        this.setState({countries:this.state.countries})
+        localStorage.setItem('countries-list',JSON.stringify(this.state.countries))
+    }
     render() {
         const {countries, searchCountries} = this.state;
         return (
             <div>
+
                 <div style={{margin: "20px 0"}} align="center">
                     <div align="center" style={{display: "inherit"}}>
                         {/*onMouseOver={()=>message.warn('search by country name')} onMouseOut={()=>message.warn('removed mouse')}*/}
@@ -98,17 +105,34 @@ class Home extends Component {
                                         style={{fontSize: 20, cursor: "pointer"}}/>
                     </div>
                 </div>
-                <div align="center">
-                    {/*array-to-map--------.map(actualmethod)..(name-user defined var),=><div></div>)*/}
-                    {this.state.customArray.map((name,index)=><div>{index+1} {name}</div>)}
-                </div>
+                {/*<div align="center">*/}
+                {/*    /!*array-to-map--------.map(actualmethod)..(name-user defined var),=><div></div>)*!/*/}
+                {/*    {this.state.customArray.map((name,index)=><div>{index+1} {name}</div>)}*/}
+                {/*</div>*/}
+                {/*<div align="center">*/}
+                {/*    {["ram",1,2,3,4,"52"].map((number,index)=><button>{index}.{number}</button>)}*/}
+                {/*</div>*/}
                 <div className="countryWrapper" style={{gridTemplateColumns:"repeat(5,1fr)",margin: 100}}>
-                    <Card style={{textAlign:"center",display:"block",height:100,color:"darkblue",fontWeight:"bolder"}}>
-                       <span>Number of Countries: </span><br/>
-                       <span>{countries.length}</span>
-                    </Card>
-                    {countries.map((country,index)=>
-                        <CountryCard key={index} country={country}/>)
+                    <h3>Favourite Countries</h3>
+
+                    {countries.filter((country)=>country.isFavourite).map((country,index)=>
+                        <CountryCard updateCountry={()=>this.updateList()} key={index} country={country}/>)
+                    }
+
+                </div>
+                <h3 style={{margin: 100}}>Countries</h3>
+                <div className="countryWrapper" style={{gridTemplateColumns:"repeat(5,1fr)",margin: 100}}>
+
+
+                    {/*<div style={{display:"grid"}}>*/}
+                    {/*    <Card style={{textAlign:"center",display:"block",height:100,marginBottom:20,color:"darkblue",fontWeight:"bolder"}}>*/}
+                    {/*        <span>Number of Countries: </span><br/>*/}
+                    {/*        <span>{countries.length}</span>*/}
+                    {/*    </Card>*/}
+                    {/*</div>*/}
+
+                    {countries.filter((country)=>!country.isFavourite).map((country,index)=>
+                        <CountryCard updateCountry={()=>this.updateList()} key={index} country={country}/>)
                     }
 
                     {/*filter(country => this.state.searchKey?country.name.toUpperCase().includes(this.state.searchKey.toUpperCase()):country)*/}
@@ -119,7 +143,6 @@ class Home extends Component {
                     {/*        </Link>*/}
                     {/*    )*/}
                     {/*}*/}
-                    {/*<QuoteCard quote="hello this is a quote" quoteHeader="quote in home page"/>*/}
                 </div>
             </div>
         );

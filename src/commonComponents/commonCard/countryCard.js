@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Card, Tag} from "antd";
 import "./style.css"
+import {HeartFilled, HeartOutlined} from "@ant-design/icons";
 
 class CountryCard extends Component {
     constructor(props) {
@@ -13,41 +14,52 @@ class CountryCard extends Component {
     componentWillReceiveProps(nextProps, nextContext) {
         this.setState({country: nextProps.country})
     }
+    makeCountryFav=()=>
+    {
+        let country=this.state.country;
+        country.isFavourite=country.isFavourite?false:true;
+        this.setState({country:country})
+        this.props.updateCountry();
+    }
 
     render() {
         return (
             <div>
-                {this.state.country ? <Card className="countryCard1">
-                    <div style={{textAlign: "center"}}>
+                {this.state.country ?
+                    <Card className="countryCard1">
+                        {this.state.country.isFavourite?
+                            <HeartFilled onClick={()=>this.makeCountryFav()} className='favIcon'/> :
+                            <HeartOutlined onClick={()=>this.makeCountryFav()} className='favIcon'/>}
+                        <div style={{textAlign: "center"}}>
 
-                        <img className="countryImg" src={this.state.country.flag}/>
-                    </div>
-                    <div className="wrapperDiv displayGrid">
-                        <div className="displayFlex">
-                            <div className="displayGrid">
-                                <span className="countryTitle">{this.state.country.name}</span>
-                                <span>{this.state.country.capital}</span>
-                            </div>
-                            <div>
-                                <div className="displayGrid">
-                                    {this.state.country.latlng.map(item =>
-                                    <span>{item}</span>)}
-                                </div>
-
-                            </div>
+                            <img className="countryImg" src={this.state.country.flag}/>
                         </div>
+                        <div className="wrapperDiv displayGrid">
+                            <div className="displayFlex">
+                                <div className="displayGrid">
+                                    <span className="countryTitle">{this.state.country.name}</span>
+                                    <span>{this.state.country.capital}</span>
+                                </div>
+                                <div>
+                                    <div className="displayGrid">
+                                        {this.state.country.latlng.map(item =>
+                                            <span>{item}</span>)}
+                                    </div>
 
-                        <span>Population: {this.state.country.population}</span>
-                        <span>Area: {this.state.country.area}</span>
-                    </div>
-                    <div className="wrapperDiv" style={{display: "grid"}}>
-                        <span className="countryTitle">Languages</span>
-                        {this.state.country.languages.map((lang) =>
-                            <Tag className="commonTag" color="blue">{lang.name}</Tag>
-                        )}
+                                </div>
+                            </div>
 
-                    </div>
-                </Card> : ''}
+                            <span>Population: {this.state.country.population}</span>
+                            <span>Area: {this.state.country.area}</span>
+                        </div>
+                        <div className="wrapperDiv" style={{display: "grid"}}>
+                            <span className="countryTitle">Languages</span>
+                            {this.state.country.languages.map((lang) =>
+                                <Tag className="commonTag" color="blue">{lang.name}</Tag>
+                            )}
+
+                        </div>
+                    </Card> : ''}
 
             </div>
         );
