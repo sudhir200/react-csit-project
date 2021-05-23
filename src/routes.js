@@ -8,6 +8,8 @@ import UserAdd from "./components/user/userAdd";
 import CountryCard from "./commonComponents/commonCard/countryCard";
 import GetCountryByName from "./components/country/countryByName";
 import FileOne from "./functionApproach/fileOne";
+import Movies from "./components/movies/movies";
+import IndUser from "./components/userDashboard/indUser";
 
 class Routes extends Component {
     render() {
@@ -19,9 +21,12 @@ class Routes extends Component {
                         <Switch>
                             <Route exact path="/" component={Home}/>
                             <Route exact path="/about" component={About}/>
+                            <Route exact path="/movies" component={Movies}/>
+                            <Route exact path="/users" component={Users}/>
                             <Route exact path="/user/add" component={UserAdd}/>
                             <Route exact path="/country/:name" component={GetCountryByName}/>
                             <Route exact path="/user/:userId/course/:courseId" component={Users}/>
+                            <Route exact path="/user/:userId" component={IndUser}/>
                             <Route exact path="/test" component={FileOne}/>
                         </Switch>
                         :

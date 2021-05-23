@@ -85,7 +85,7 @@ class Home extends Component {
     }
     updateList=()=>
     {
-        this.setState({countries:this.state.countries})
+        this.setState({searchKey:'',countries:this.state.countries})
         localStorage.setItem('countries-list',JSON.stringify(this.state.countries))
     }
     render() {
@@ -131,7 +131,7 @@ class Home extends Component {
                     {/*    </Card>*/}
                     {/*</div>*/}
 
-                    {countries.filter((country)=>!country.isFavourite).map((country,index)=>
+                    {countries.filter((country)=>this.state.searchKey && !country.isFavourite?country.name.toUpperCase().includes(this.state.searchKey.toUpperCase()):!country.isFavourite).map((country,index)=>
                         <CountryCard updateCountry={()=>this.updateList()} key={index} country={country}/>)
                     }
 

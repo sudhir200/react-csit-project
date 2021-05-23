@@ -43,8 +43,27 @@ export function getUsers()
         axios({
             method:"get",
             url:`https://reqres.in/api/users?page=${1}`,
-        }).then(r=>resolve(r))
+        }).then(r=> {
+            resolve(r.data)
+        })
             .catch(err=> {
+                console.log(err)
+
+                reject(err)
+            })
+    })
+}
+export function getIndividualUser(userId)
+{
+    return new Promise(function (resolve, reject){
+        axios({
+            method:"get",
+            url:`https://reqres.in/api/users/${userId}`,
+        }).then(r=> {
+            resolve(r.data)
+        })
+            .catch(err=> {
+                console.log(err)
 
                 reject(err)
             })

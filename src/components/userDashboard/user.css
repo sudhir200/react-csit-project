@@ -1,0 +1,48 @@
+.gridWrapper
+{
+    grid-template-columns:  repeat( auto-fit, minmax(350px, 1fr) );
+    /*grid-template-columns:  repeat(5,1fr);*/
+    /*grid-template-columns: 25% 25% 25% 25% ;*/
+    display: grid;
+    gap:20px;
+    padding: 20px;
+    margin: 20px;
+}
+.userCard
+{
+
+    width: 350px;
+}
+.space-bwtn
+{
+    display: flex;
+    justify-content: space-between;
+}
+.header-title
+{
+    font-size: 20px;
+    font-weight: bold;
+}
+.input-user
+{
+    margin: 10px 0;
+    font-size: 18px;
+    outline: none;
+}
+.submit-btn
+{
+    margin:30px auto;
+    outline: none;
+    background: #99B1F0;
+    color: white;
+    padding: 10px;
+    font-weight: bold;
+    border:1px solid #99B1F0;
+    font-size: 18px;
+    cursor: pointer;
+}
+.submit-btn:hover
+{
+    transform: scale(1.2) ;
+    opacity: 0.5;
+}
