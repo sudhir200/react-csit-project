@@ -2,7 +2,11 @@
 {
     width: 100%;
     height: 77px;
+    top:0;
     background: #99B1F0;
+}
+.header-top + .content {
+    padding-top: 102px;
 }
 .logoIcon
 {

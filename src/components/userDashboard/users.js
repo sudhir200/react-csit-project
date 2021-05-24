@@ -1,13 +1,16 @@
 import React, {Component} from 'react';
 import {getUsers} from "../../apicall/users";
 import "./user.css"
-import {Avatar, Card} from "antd";
+import {Modal, Avatar, Button, Card, message} from "antd";
 import {Link} from "react-router-dom";
+import AddUser from "./addUser";
+import MultipleInput from "./multipleRefsExample";
 class Users extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            users: []
+            users: [],
+            addUser:false
         }
     }
 
@@ -21,11 +24,23 @@ class Users extends Component {
             self.setState({users: res})
         })
     }
-
+    updateUser=(res)=>
+    {
+        res.first_name=res.name.toUpperCase();
+        res.last_name=res.job;
+        res.avatar="https://reqres.in/img/faces/2-image.jpg";
+        this.state.users.data.push(res)
+        this.setState({users: this.state.users,addUser:false})
+        message.success('User added')
+    }
     render() {
         const {users} = this.state;
         return (
             <div >
+                <div className="paddingLeftRight20 space-bwtn">
+                    <h2>Users</h2>
+                    <Button onClick={()=>this.setState({addUser:true})}>Add User</Button>
+                </div>
                 {users.data?
                     <div className="gridWrapper">
 
@@ -56,6 +71,9 @@ class Users extends Component {
                         }
 
                     </div> : <div align="center">No data</div>}
+                <Modal footer={null} title="Basic Modal" visible={this.state.addUser} onOk={()=>console.log('123')} onCancel={()=>this.setState({addUser:false})}>
+                    <MultipleInput addedUser={(res)=>this.updateUser(res.data)} firstName={""} lastName={""} Email={""}/>
+                </Modal>
             </div>
         );
     }

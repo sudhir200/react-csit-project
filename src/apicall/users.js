@@ -3,6 +3,8 @@ import {message} from "antd";
 
 export function addUser(name,job)
 {
+    console.log(name)
+    console.log(job)
     let data={
         "name":name,
         "job":job

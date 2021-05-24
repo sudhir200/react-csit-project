@@ -13,6 +13,10 @@
 
     width: 350px;
 }
+.paddingLeftRight20
+{
+    padding: 10px 50px;
+}
 .space-bwtn
 {
     display: flex;
