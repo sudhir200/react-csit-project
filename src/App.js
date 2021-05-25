@@ -3,6 +3,7 @@ import Routes from "./routes";
 import 'antd/dist/antd.css';
 import {Button} from "antd";
 import FileOne from "./functionApproach/fileOne";
+import {TestProvider} from "./components/context/testContext";
 let country1="China";
 const country="Nepal";
 
@@ -62,7 +63,9 @@ class App extends Component {
         const {element,isLogin}=this.state;
         return (
             <div>
-                <Routes isLogin={this.state.isLogin}/>
+                <TestProvider value="sudhir">
+                    <Routes isLogin={this.state.isLogin}/>
+                </TestProvider>
             </div>
         );
     }

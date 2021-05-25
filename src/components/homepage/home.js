@@ -6,6 +6,7 @@ import {Link} from "react-router-dom";
 import {SearchOutlined} from "@ant-design/icons"
 import {Card, message} from "antd";
 import QuoteCard from "../../commonComponents/quoteCard/quoteCard";
+import {TestConsumer} from "../context/testContext";
 
 class Home extends Component {
     constructor() {
@@ -91,60 +92,69 @@ class Home extends Component {
     render() {
         const {countries, searchCountries} = this.state;
         return (
-            <div>
+            <TestConsumer>
+                {(value)=> {
+                    return <div>
+                        <div>
 
-                <div style={{margin: "20px 0"}} align="center">
-                    <div align="center" style={{display: "inherit"}}>
-                        {/*onMouseOver={()=>message.warn('search by country name')} onMouseOut={()=>message.warn('removed mouse')}*/}
-                        {/*onKeyPress={(event)=>{this.handleEnter(event)}}*/}
-                        <input    style={{width: 500, height: 50, borderRadius: 20}} name="searchKey"
-                               value={this.state.searchKey} onInput={event => this.handleChange(event)}
-                               className="searchInput" type="text"/>
-                        {/*<Search  className="searchInput" style={{width:500,height:50,borderRadius:20}}  />*/}
-                        <SearchOutlined onClick={() => this.getCountryByName()} className="searchIcon"
-                                        style={{fontSize: 20, cursor: "pointer"}}/>
+                        <div style={{margin: "20px 0"}} align="center">
+                            <div align="center" style={{display: "inherit"}}>
+                                {/*onMouseOver={()=>message.warn('search by country name')} onMouseOut={()=>message.warn('removed mouse')}*/}
+                                {/*onKeyPress={(event)=>{this.handleEnter(event)}}*/}
+                                <input    style={{width: 500, height: 50, borderRadius: 20}} name="searchKey"
+                                          value={this.state.searchKey} onInput={event => this.handleChange(event)}
+                                          className="searchInput" type="text"/>
+                                {/*<Search  className="searchInput" style={{width:500,height:50,borderRadius:20}}  />*/}
+                                <SearchOutlined onClick={() => this.getCountryByName()} className="searchIcon"
+                                                style={{fontSize: 20, cursor: "pointer"}}/>
+                            </div>
+                        </div>
+                        {/*<div align="center">*/}
+                        {/*    /!*array-to-map--------.map(actualmethod)..(name-user defined var),=><div></div>)*!/*/}
+                        {/*    {this.state.customArray.map((name,index)=><div>{index+1} {name}</div>)}*/}
+                        {/*</div>*/}
+                        {/*<div align="center">*/}
+                        {/*    {["ram",1,2,3,4,"52"].map((number,index)=><button>{index}.{number}</button>)}*/}
+                        {/*</div>*/}
+                        <div className="countryWrapper" style={{gridTemplateColumns:"repeat(5,1fr)",margin: 100}}>
+                            <h3>Favourite Countries {value}</h3>
+
+                            {countries.filter((country)=>country.isFavourite).map((country,index)=>
+                                <CountryCard updateCountry={()=>this.updateList()} key={index} country={country}/>)
+                            }
+
+                        </div>
+                        <h3 style={{margin: 100}}>Countries</h3>
+                        <div className="countryWrapper" style={{gridTemplateColumns:"repeat(5,1fr)",margin: 100}}>
+
+
+                            {/*<div style={{display:"grid"}}>*/}
+                            {/*    <Card style={{textAlign:"center",display:"block",height:100,marginBottom:20,color:"darkblue",fontWeight:"bolder"}}>*/}
+                            {/*        <span>Number of Countries: </span><br/>*/}
+                            {/*        <span>{countries.length}</span>*/}
+                            {/*    </Card>*/}
+                            {/*</div>*/}
+
+                            {countries.filter((country)=>this.state.searchKey && !country.isFavourite?country.name.toUpperCase().includes(this.state.searchKey.toUpperCase()):!country.isFavourite).map((country,index)=>
+                                <CountryCard updateCountry={()=>this.updateList()} key={index} country={country}/>)
+                            }
+
+                            {/*filter(country => this.state.searchKey?country.name.toUpperCase().includes(this.state.searchKey.toUpperCase()):country)*/}
+                            {/*{countries.map((country, index) =>*/}
+                            {/*        <Link to={`/country/${country.name}`}>*/}
+                            {/*            {index}*/}
+                            {/*            <CountryCard key={index} country={country}/>*/}
+                            {/*        </Link>*/}
+                            {/*    )*/}
+                            {/*}*/}
+                        </div>
                     </div>
-                </div>
-                {/*<div align="center">*/}
-                {/*    /!*array-to-map--------.map(actualmethod)..(name-user defined var),=><div></div>)*!/*/}
-                {/*    {this.state.customArray.map((name,index)=><div>{index+1} {name}</div>)}*/}
-                {/*</div>*/}
-                {/*<div align="center">*/}
-                {/*    {["ram",1,2,3,4,"52"].map((number,index)=><button>{index}.{number}</button>)}*/}
-                {/*</div>*/}
-                <div className="countryWrapper" style={{gridTemplateColumns:"repeat(5,1fr)",margin: 100}}>
-                    <h3>Favourite Countries</h3>
+                    </div>
+                }
 
-                    {countries.filter((country)=>country.isFavourite).map((country,index)=>
-                        <CountryCard updateCountry={()=>this.updateList()} key={index} country={country}/>)
-                    }
+                }
+            </TestConsumer>
 
-                </div>
-                <h3 style={{margin: 100}}>Countries</h3>
-                <div className="countryWrapper" style={{gridTemplateColumns:"repeat(5,1fr)",margin: 100}}>
-
-
-                    {/*<div style={{display:"grid"}}>*/}
-                    {/*    <Card style={{textAlign:"center",display:"block",height:100,marginBottom:20,color:"darkblue",fontWeight:"bolder"}}>*/}
-                    {/*        <span>Number of Countries: </span><br/>*/}
-                    {/*        <span>{countries.length}</span>*/}
-                    {/*    </Card>*/}
-                    {/*</div>*/}
-
-                    {countries.filter((country)=>this.state.searchKey && !country.isFavourite?country.name.toUpperCase().includes(this.state.searchKey.toUpperCase()):!country.isFavourite).map((country,index)=>
-                        <CountryCard updateCountry={()=>this.updateList()} key={index} country={country}/>)
-                    }
-
-                    {/*filter(country => this.state.searchKey?country.name.toUpperCase().includes(this.state.searchKey.toUpperCase()):country)*/}
-                    {/*{countries.map((country, index) =>*/}
-                    {/*        <Link to={`/country/${country.name}`}>*/}
-                    {/*            {index}*/}
-                    {/*            <CountryCard key={index} country={country}/>*/}
-                    {/*        </Link>*/}
-                    {/*    )*/}
-                    {/*}*/}
-                </div>
-            </div>
         );
     }
 }

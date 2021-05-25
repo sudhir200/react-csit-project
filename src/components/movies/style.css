@@ -1,0 +1,19 @@
+.movie-img
+{
+    height: 300px;
+    width: 250px;
+}
+.gridWrapper
+{
+    grid-template-columns:  repeat( auto-fit, minmax(300px, 1fr) );
+    /*grid-template-columns:  repeat(5,1fr);*/
+    /*grid-template-columns: 25% 25% 25% 25% ;*/
+    display: grid;
+    gap:10px;
+    padding: 10px;
+    margin: 10px;
+}
+.movie-title
+{
+
+}
