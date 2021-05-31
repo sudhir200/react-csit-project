@@ -6,12 +6,19 @@ import {UserOutlined,EyeTwoTone,EyeInvisibleOutlined,LockOutlined,GoogleOutlined
 const { Title } = Typography;
 
 class Login extends Component {
-    handleLogin = (provider) => {
-        // if(provider==='f')
-        // {
-        //
-        // }
-        var provider = new firebase.auth.GoogleAuthProvider();
+    handleLogin = (socialType) => {
+        let provider;
+        if(socialType==='f')
+        {
+            //sudo nano /etc/hosts
+            //127.0.0.1 <domain_name>
+            provider = new firebase.auth.FacebookAuthProvider();
+        }
+        else if(socialType==='g')
+        {
+
+            provider = new firebase.auth.GoogleAuthProvider();
+        }
         var token = '123';
         firebase.auth().signInWithPopup(provider).then(res => {
                 this.setState({user: res.additionalUserInfo.profile})

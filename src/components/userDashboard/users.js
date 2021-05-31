@@ -5,6 +5,7 @@ import {Modal, Avatar, Button, Card, message} from "antd";
 import {Link} from "react-router-dom";
 import AddUser from "./addUser";
 import MultipleInput from "./multipleRefsExample";
+import firebase from "firebase";
 class Users extends Component {
     constructor(props, context) {
         super(props, context);

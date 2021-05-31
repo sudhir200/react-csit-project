@@ -15,19 +15,36 @@ class App extends Component {
         super(props, context);
         this.state={
             element:'water',
+            users:[],
             isLogin:!!JSON.parse(localStorage.getItem('userData'))||false,
             userInfo:JSON.parse(localStorage.getItem('userData'))||{},
         }
     }
 
     componentDidMount() {
+        // this.initializeFirebaseDb();
         this.initializeFirebase();
 
     }
+    // initializeFirebaseDb=()=>
+    // {
+    //
+    // }
     initializeFirebase=()=>
     {
         // console.log(firebaseConfig)
         firebase.initializeApp(firebaseConfig);
+        let database=firebase.firestore();
+        let dbUsers=[];
+        database.collection('users').get().then((res)=>
+        {
+            res.forEach(res=>{
+                console.log(res.data())
+                dbUsers.push(res.data())
+            })
+           this.setState({users:dbUsers})
+
+        })
         firebase.analytics();
 
     }
@@ -75,6 +92,7 @@ class App extends Component {
         const {element,isLogin}=this.state;
         return (
             <div>
+                {this.state.users.map((item)=><div>{item.name}</div>)}
                 <TestProvider value="sudhir">
                     <Routes isLogin={isLogin}/>
                 </TestProvider>
