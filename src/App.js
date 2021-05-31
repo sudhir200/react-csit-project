@@ -14,7 +14,7 @@ class App extends Component {
     constructor(props, context) {
         super(props, context);
         this.state={
-            element:'water',
+            element:'waters',
             users:[],
             isLogin:!!JSON.parse(localStorage.getItem('userData'))||false,
             userInfo:JSON.parse(localStorage.getItem('userData'))||{},
@@ -33,7 +33,11 @@ class App extends Component {
     initializeFirebase=()=>
     {
         // console.log(firebaseConfig)
-        firebase.initializeApp(firebaseConfig);
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }else {
+            firebase.app(); // if already initialized, use that one
+        }
         let database=firebase.firestore();
         let dbUsers=[];
         database.collection('users').get().then((res)=>
@@ -59,7 +63,7 @@ class App extends Component {
     }
     summerFunc=()=>
     {
-        this.setState({elem:'vapour'})
+        this.setState({elem:'vapours'})
     }
     myFunc=(param1,param2,param3)=>
     {
@@ -92,7 +96,7 @@ class App extends Component {
         const {element,isLogin}=this.state;
         return (
             <div>
-                {this.state.users.map((item)=><div>{item.name}</div>)}
+                {/*{this.state.users.map((item)=><div>{item.name}</div>)}*/}
                 <TestProvider value="sudhir">
                     <Routes isLogin={isLogin}/>
                 </TestProvider>
