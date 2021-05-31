@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch,Redirect} from "react-router-dom";
 import Home from "./components/homepage/home";
 import About from "./components/about/about";
 import Users from "./components/userDashboard/users";
@@ -10,15 +10,26 @@ import GetCountryByName from "./components/country/countryByName";
 import FileOne from "./functionApproach/fileOne";
 import Movies from "./components/movies/movies";
 import IndUser from "./components/userDashboard/indUser";
+import login from "./components/login/login";
 
 class Routes extends Component {
+    constructor(props, context) {
+        super(props, context);
+        this.state={
+            isLogin:props.isLogin
+        }
+    }
+    componentWillReceiveProps(nextProps, nextContext) {
+        this.setState({isLogin:nextProps.isLogin})
+    }
+
     render() {
         return (
             <div>
                 <Router>
-                    <Header1 isLogin={false}/>
                     {this.props.isLogin ?
                         <Switch>
+
                             <Route exact path="/" component={Home}/>
                             <Route exact path="/about" component={About}/>
                             <Route exact path="/movies" component={Movies}/>
@@ -31,8 +42,8 @@ class Routes extends Component {
                         </Switch>
                         :
                         <Switch>
-                            <Route exact path="/home" component={Home}/>
-                            <Route exact path="/about" component={About}/>
+                            <Route exact path="/" component={login}/>
+                            <Redirect from="*" to="/*"/>
                         </Switch>
                     }
                 </Router>

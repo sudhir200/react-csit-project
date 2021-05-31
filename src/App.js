@@ -4,19 +4,31 @@ import 'antd/dist/antd.css';
 import {Button} from "antd";
 import FileOne from "./functionApproach/fileOne";
 import {TestProvider} from "./components/context/testContext";
+import firebase from "firebase";
+import {firebaseConfig} from "./config";
 let country1="China";
 const country="Nepal";
+
 
 class App extends Component {
     constructor(props, context) {
         super(props, context);
         this.state={
-            element:'water'
+            element:'water',
+            isLogin:!!JSON.parse(localStorage.getItem('userData'))||false,
+            userInfo:JSON.parse(localStorage.getItem('userData'))||{},
         }
     }
 
     componentDidMount() {
-        this.loginUser();
+        this.initializeFirebase();
+
+    }
+    initializeFirebase=()=>
+    {
+        // console.log(firebaseConfig)
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
 
     }
     loginUser=()=>
@@ -64,7 +76,7 @@ class App extends Component {
         return (
             <div>
                 <TestProvider value="sudhir">
-                    <Routes isLogin={this.state.isLogin}/>
+                    <Routes isLogin={isLogin}/>
                 </TestProvider>
             </div>
         );
