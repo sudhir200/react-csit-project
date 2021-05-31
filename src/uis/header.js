@@ -24,7 +24,7 @@ function Header1({name,rollNo,onUserClick}) {
     return (
         <div style={{display:"grid"}}>
             <span>{name},{rollNo}</span>
-            <button onClick={changeName}>change names</button>
+            <button onClick={changeName}>change name</button>
         </div>
     );
 }
