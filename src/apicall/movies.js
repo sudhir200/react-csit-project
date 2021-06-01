@@ -22,11 +22,11 @@ export function getMovies() {
             })
     })
 }
-export function getYtsMovies(limit,page) {
+export function getYtsMovies(limit,page,genre,query) {
     return new Promise(function (resolve, reject) {
         axios({
             method: "get",
-            url: `https://yts.mx/api/v2/list_movies.json?limit=${limit}&page=${page}&genre=animation`,
+            url: `https://yts.mx/api/v2/list_movies.json?limit=${limit}&page=${page}&genre=${genre}&query_term=${query}`,
             // headers: {
             //     'x-rapidapi-key': '3e66f35d1fmsh834e80b0ec2725dp1e3f23jsnddcd57bf8d0d',
             //     'x-rapidapi-host': 'movie-database-imdb-alternative.p.rapidapi.com',

@@ -1,29 +1,41 @@
 import React, {Component} from 'react';
-import {getMovies, getSingleMovie, getYtsMovies} from "../../apicall/movies";
-import {Skeleton, Card, Typography, Tag, Button} from "antd";
+import {getSingleMovie, getYtsMovies} from "../../apicall/movies";
+import {BackTop, Button, Empty, Input, Modal, Pagination, Rate, Skeleton, Tag, Tooltip, Typography} from "antd";
 import "./movies.scss"
 import "./style.css"
-import MarvelMovies from "./marvelMovies";
+import {CheckCircleOutlined, DownloadOutlined, UpCircleFilled} from "@ant-design/icons"
+import YouTubePlayer from "react-player/youtube";
 
-const { Title,Paragraph } = Typography;
+const genres = ['biography', 'action', 'fantasy', 'mystery', 'thriller', 'drama', 'sci-fi', 'animation', 'horror', 'comedy']
+
+const {Title, Paragraph} = Typography;
+const {Search} = Input;
+
 class Movies extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            moviesList: [],
-            loading: false
+            moviesList: new Map(),
+            loading: new Map(),
+            dialogItem: [],
+            openMovie: false,
         }
     }
 
     componentDidMount() {
-        this.getMoviesList();
+        genres.forEach((genre) => {
+            this.getMoviesList(genre, 1, '', 10);
+        })
+
     }
 
-    getMoviesList() {
-        this.setState({loading: true})
-        getYtsMovies(50,1).then(res => {
-            console.log(res)
-            this.setState({loading: false, moviesList: res.movies})
+    getMoviesList(genre, pageNo, query, limit) {
+        this.state.loading.set(genre, !this.state.moviesList.get(genre))
+        this.setState({loading: this.state.loading})
+        getYtsMovies(limit, pageNo, genre, query).then(res => {
+            this.state.moviesList.set(genre, res)
+            this.state.loading.set(genre, false)
+            this.setState({loading: this.state.loading, moviesList: this.state.moviesList})
         })
     }
 
@@ -37,39 +49,111 @@ class Movies extends Component {
 
 
     render() {
-        const {moviesList, loading} = this.state;
+        const {moviesList, dialogItem, openMovie, loading} = this.state;
         return (
             <div>
-
-                <MarvelMovies/>
-                <div className="titleWrapper">                    <Title level={2}>Other movies</Title>
+                <div className="titleWrapper">
+                    {genres.map((genre) =>
+                        <a href={`#${genre}`}>
+                            <Tag icon={<CheckCircleOutlined/>}
+                                 color={'#' + (Math.random() * 0xFFFFFF << 0).toString(16)}>{genre}</Tag>
+                        </a>)}
                 </div>
-                <div className="grid-container">
-                    {moviesList?moviesList.filter(movie=>movie.large_cover_image).map(
-                        (movie) =>
-                            <div>
-                                <div className="movie-card">
-                                    <img className="movie-img" src={movie.medium_cover_image}/>
-                                    <div className="movie-infos">
-                                        <span className="movie-title">{movie.title}</span>
-                                        <Paragraph  ellipsis={{rows: 4, expandable: true, symbol: 'more'}} className="movie-description">{movie.summary}</Paragraph>
-                                        {movie.genres.map(item=><Tag color="black">{item}</Tag> )}
-                                        <div style={{display:"grid",margin:"10px 0"}}>
-                                            <b >Torrent files</b>
-                                            <div className="space-bwtn">
 
-                                                {movie.torrents.map((item,index)=><a href={item.url} color="black"><Button type="primary" style={{marginRight:10}}>Link {index+1}</Button></a> )}
+
+                {genres.map((genre) =>
+                    <div id={genre}>
+
+                        <div className="titleWrapper space-between">
+                            <Title level={2}>{genre.toUpperCase()}</Title>
+                            <Search allowClear style={{width: "25%"}} placeholder={`search movies in ${genre}`}
+                                    onSearch={(searchTxt) => {
+                                        this.getMoviesList(genre, 1, searchTxt, 20)
+                                    }} enterButton/>
+                            <Pagination onChange={(current, pageSize) => {
+                                // document.getElementById(genre).scrollIntoView()
+                                this.getMoviesList(genre, current, '', pageSize)
+                            }} defaultCurrent={1} total={500}/>
+
+                        </div>
+
+                        <div className="grid-container">
+                            {loading.get(genre) ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(item => (
+                                <Skeleton active={true}/>)) : ''}
+                            {moviesList.get(genre) && moviesList.get(genre).movie_count && !loading.get(genre) ? moviesList.get(genre).movies.filter(movie => movie.large_cover_image).map(
+                                (movie) =>
+                                    <div>
+                                        <div className="movie-card" onClick={() => {
+                                            this.setState({dialogItem: movie, openMovie: true})
+                                        }}>
+                                            <img loading="lazy" className="movie-img" src={movie.medium_cover_image}/>
+                                            <div className="movie-infos">
+                                                <span className="movie-title">{movie.title}</span><br/>
+                                                <Tooltip placement="topLeft" title={'Rating: ' + movie.rating}>
+                                                    <div>
+
+                                                        <Rate key={movie.rating} disabled defaultValue={movie.rating}/>
+                                                    </div>
+                                                </Tooltip>
+                                                <div className="movie-title">{movie.year}</div>
+                                                <Paragraph ellipsis={{rows: 3, tooltip: true, symbol: 'more'}}
+                                                           className="movie-description">{movie.summary}</Paragraph>
+                                                <div className="scroll-container">
+                                                    {movie.genres.map(item => <Tag color="black">{item}</Tag>)}
+                                                </div>
+                                                {movie.language?<div className="scroll-container">
+                                                    <Tag color="blue"><b>{movie.language.toUpperCase()}</b></Tag>
+                                                </div>:''}
+                                                <div style={{display: "grid", margin: "10px 0"}}>
+                                                    <b>Torrent files</b>
+                                                    <div className="scroll-container" style={{
+                                                        gap: 10
+                                                    }}>
+
+                                                        {movie.torrents.map((item, index) => <a href={item.url}
+                                                                                                color="black"><Button
+                                                            type="primary" style={{marginRight: 10}}
+                                                            shape="round">Link {index + 1}<DownloadOutlined/></Button></a>)}
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                )
+
+                                : ''}
+
+                        </div>
+                        {moviesList.get(genre) && moviesList.get(genre).movie_count === 0 ?
+                            <div align="center">
+                                <Empty description={<div>no movies found for your search in <b>{genre}</b></div>}/>
                             </div>
-                    )
+                            : ''}
 
-                    :''}
 
-                </div>
-
+                    </div>)
+                }
+                <BackTop>
+                    <UpCircleFilled style={{fontSize: 25, color: "black"}}/>
+                </BackTop>
+                {openMovie ?
+                <Modal destroyOnClose={true} bodyStyle={{background:"#282c34"}} style={{top:10,background:"#282c34"}} afterClose={()=> this.setState({openMovie: false, dialogItem: []})} width="50%"  onCancel={() => {
+                    this.setState({openMovie: false, dialogItem: []})
+                }} footer={null} title={<Title level={3}>{dialogItem.title}</Title>}  visible={openMovie}>
+                    {openMovie ?
+                        <div className="movie-infos">
+                            {dialogItem.yt_trailer_code?
+                                <div>
+                                    <Title className="movie-description" level={4}>Watch trailer</Title>
+                                    <YouTubePlayer width={"100%"} height={500} url={`https://youtube.com/watch?v=${dialogItem.yt_trailer_code}`}/>
+                                </div>
+                                :''}
+                            <Title className="movie-description marginTop30" level={4}>Summary</Title>
+                            <span  className=" movie-description">
+                                {dialogItem.description_full}
+                            </span>
+                        </div> : ''}
+                </Modal>:''}
             </div>
         );
     }
