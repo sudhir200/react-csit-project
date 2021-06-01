@@ -27,6 +27,8 @@ class Routes extends Component {
         return (
             <div>
                 <Router>
+                    {this.props.isLogin ?<Header1 isLogin={this.props.isLogin}/>:''}
+
                     {this.props.isLogin ?
                         <Switch>
 

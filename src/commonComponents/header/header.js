@@ -48,17 +48,18 @@ class Header1 extends Component {
                         <SmileOutlined style={{fontSize: 30, color: "#fefefe"}} className="logoIcon"/>
                         <span className="titleText">CSIT LECTURE</span>
                     </div>
-                    <div style={{paddingTop: 30}}>
+                    <div className="menu-items" style={{paddingTop: 30}}>
                         <Link style={{textDecoration: "none"}} to={"/"}><span className="titleText item">home</span>
                         </Link>
-                        <Link style={{textDecoration: "none"}} to={"/about"}><span
-                            className="titleText item">About</span> </Link>
+
                         <Link style={{textDecoration: "none"}} to={"/movies"}><span
                             className="titleText item">Movies</span> </Link>
                         <Link style={{textDecoration: "none"}} to={"/users"}><span
                             className="titleText item">Users</span> </Link>
                         <Link style={{flexGrow: 0.5, textDecoration: "none"}} to={"/todo"}><span
                             className="titleText item">TO-DO list</span> </Link>
+                        <Link style={{textDecoration: "none"}} to={"/about"}><span
+                            className="titleText item">About</span> </Link>
                     </div>
                     <div style={{paddingTop: 30, marginRight: 10}}>
 

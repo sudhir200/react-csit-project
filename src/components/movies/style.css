@@ -1,7 +1,7 @@
 .movie-img
 {
-    height: 300px;
-    width: 250px;
+    height: 350px;
+    width: 100%;
 }
 .gridWrapper
 {
@@ -10,10 +10,39 @@
     /*grid-template-columns: 25% 25% 25% 25% ;*/
     display: grid;
     gap:10px;
-    padding: 10px;
-    margin: 10px;
+    margin: 0 100px;
 }
 .movie-title
 {
+    font-size: 16px;
+    font-weight: bold;
+}
+.movie-card
+{
+    display: grid !important;
+}
+.movie-infos
+{
+    background: #282c34;
+    color: white;
+    padding: 10px !important;
+}
+.movie-description
+{
+    color: white !important;
+}
+.movies-container
+{
+    margin: 30px;
+}
+@media screen and (max-width: 700px) {
+    .movie-card
+    {
+        margin: auto;
+    }
 
+    .gridWrapper
+    {
+        margin: auto;
+    }
 }

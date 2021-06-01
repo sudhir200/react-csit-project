@@ -5,7 +5,7 @@ import {Button} from "antd";
 import FileOne from "./functionApproach/fileOne";
 import {TestProvider} from "./components/context/testContext";
 import firebase from "firebase";
-import {firebaseConfig} from "./config";
+import {database, firebaseConfig} from "./config";
 let country1="China";
 const country="Nepal";
 
@@ -32,23 +32,25 @@ class App extends Component {
     // }
     initializeFirebase=()=>
     {
+        console.log(firebase.apps.length)
         // console.log(firebaseConfig)
-        if (!firebase.apps.length) {
+        if (firebase.apps.length===0) {
             firebase.initializeApp(firebaseConfig);
         }else {
             firebase.app(); // if already initialized, use that one
         }
-        let database=firebase.firestore();
-        let dbUsers=[];
-        database.collection('users').get().then((res)=>
-        {
-            res.forEach(res=>{
-                console.log(res.data())
-                dbUsers.push(res.data())
-            })
-           this.setState({users:dbUsers})
 
-        })
+        // let dbUsers=[];
+        // database.collection('users').get().then((res)=>
+        // {
+        //     res.forEach(res=>{
+        //         console.log(res.data())
+        //         dbUsers.push(res.data())
+        //     })
+        //    this.setState({users:dbUsers})
+        //
+        // })
+
         firebase.analytics();
 
     }
@@ -97,7 +99,7 @@ class App extends Component {
         return (
             <div>
                 {/*{this.state.users.map((item)=><div>{item.name}</div>)}*/}
-                <TestProvider value="sudhir">
+                <TestProvider value={this.state.users}>
                     <Routes isLogin={isLogin}/>
                 </TestProvider>
             </div>

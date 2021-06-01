@@ -97,7 +97,6 @@ class Home extends Component {
         return (
 
                         <div>
-                            <Header1 isLogin={this.props.isLogin}/>
 
                             {/*<ReactPlayer*/}
                             {/*    className='react-player'*/}
