@@ -1,0 +1,81 @@
+
+
+.grid-container {
+  columns: 4 10px;
+  column-gap: 5px;
+  width: 90%;
+  margin: 20px auto;
+  .movie-card
+  {
+    &:hover
+    {
+      cursor: pointer;
+
+    }
+  }
+  div {
+    margin: 0 5px 5px 0;
+    display: inline-block;
+    width: 100%;
+    padding: 5px;
+    transition: all .25s ease-in-out;
+
+     img {
+      width: 100%;
+      transition: all .25s ease-in-out;
+    }
+
+  }
+}
+.titleWrapper
+{
+  margin:5% 5%;
+}
+.movie-img
+{
+  height: 350px;
+  width: 100%;
+}
+
+
+
+.movie-title
+{
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.movie-infos
+{
+  background: #282c34;
+  color: white;
+  padding: 20px;
+}
+.movie-description
+{
+  color: white !important;
+}
+.scroll-container {
+  width: 300px !important;
+  overflow-x: scroll;
+  white-space: nowrap;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+.marginTop30
+{
+  margin-top:30px;
+}
+@media screen and (max-width: 700px) {
+
+
+  .grid-container
+  {
+    columns: 1 10px;
+
+  }
+}
+
+
+

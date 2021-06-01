@@ -4,4 +4,4 @@ const TestContext=React.createContext('');
 const TestProvider=TestContext.Provider;
 const TestConsumer=TestContext.Consumer;
 
-export {TestConsumer,TestProvider};
+export {TestConsumer,TestProvider,TestContext};

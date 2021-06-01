@@ -4,19 +4,54 @@ import 'antd/dist/antd.css';
 import {Button} from "antd";
 import FileOne from "./functionApproach/fileOne";
 import {TestProvider} from "./components/context/testContext";
+import firebase from "firebase";
+import {database, firebaseConfig} from "./config";
 let country1="China";
 const country="Nepal";
+
 
 class App extends Component {
     constructor(props, context) {
         super(props, context);
         this.state={
-            element:'water'
+            element:'waters',
+            users:[],
+            isLogin:!!JSON.parse(localStorage.getItem('userData'))||false,
+            userInfo:JSON.parse(localStorage.getItem('userData'))||{},
         }
     }
 
     componentDidMount() {
-        this.loginUser();
+        // this.initializeFirebaseDb();
+        this.initializeFirebase();
+
+    }
+    // initializeFirebaseDb=()=>
+    // {
+    //
+    // }
+    initializeFirebase=()=>
+    {
+        console.log(firebase.apps.length)
+        // console.log(firebaseConfig)
+        if (firebase.apps.length===0) {
+            firebase.initializeApp(firebaseConfig);
+        }else {
+            firebase.app(); // if already initialized, use that one
+        }
+
+        // let dbUsers=[];
+        // database.collection('users').get().then((res)=>
+        // {
+        //     res.forEach(res=>{
+        //         console.log(res.data())
+        //         dbUsers.push(res.data())
+        //     })
+        //    this.setState({users:dbUsers})
+        //
+        // })
+
+        firebase.analytics();
 
     }
     loginUser=()=>
@@ -30,7 +65,7 @@ class App extends Component {
     }
     summerFunc=()=>
     {
-        this.setState({elem:'vapour'})
+        this.setState({elem:'vapours'})
     }
     myFunc=(param1,param2,param3)=>
     {
@@ -63,8 +98,9 @@ class App extends Component {
         const {element,isLogin}=this.state;
         return (
             <div>
-                <TestProvider value="sudhir">
-                    <Routes isLogin={this.state.isLogin}/>
+                {/*{this.state.users.map((item)=><div>{item.name}</div>)}*/}
+                <TestProvider value={this.state.users}>
+                    <Routes isLogin={isLogin}/>
                 </TestProvider>
             </div>
         );

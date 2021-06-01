@@ -2,11 +2,13 @@ import React, {Component} from 'react';
 import {getCountries} from "../../apicall/getQuotes";
 import "./style.css"
 import CountryCard from "../../commonComponents/commonCard/countryCard";
-import {Link} from "react-router-dom";
+import {Link, Switch} from "react-router-dom";
 import {SearchOutlined} from "@ant-design/icons"
 import {Card, message} from "antd";
 import QuoteCard from "../../commonComponents/quoteCard/quoteCard";
 import {TestConsumer} from "../context/testContext";
+import ReactPlayer from 'react-player/youtube'
+import Header1 from "../../commonComponents/header/header";
 
 class Home extends Component {
     constructor() {
@@ -16,6 +18,7 @@ class Home extends Component {
             searchCountries: [],
             customArray: ["RAM","Shyam","hari","hariram","RAM2","RAM3","RAM4",],
             searchKey: '',
+            loading:false
         }
     }
 
@@ -33,6 +36,7 @@ class Home extends Component {
     getAllCountries = () => {
 
         console.log('getAllCountries...')
+        this.setState({loading:true})
         if(!this.state.countries.length>0)
         {
             getCountries().then(r => {
@@ -40,8 +44,7 @@ class Home extends Component {
 
                 console.log(r)
                 localStorage.setItem('countries-list',JSON.stringify(r.data))
-
-                // this.setState({countries: r.data})
+                this.setState({countries: r.data})
             }).catch(err => {
                 console.log('error...')
 
@@ -92,12 +95,18 @@ class Home extends Component {
     render() {
         const {countries, searchCountries} = this.state;
         return (
-            <TestConsumer>
-                {(value)=> {
-                    return <div>
+
                         <div>
 
-                        <div style={{margin: "20px 0"}} align="center">
+                            {/*<ReactPlayer*/}
+                            {/*    className='react-player'*/}
+                            {/*    url='https://www.youtube.com/watch?v=ysz5S6PUM-U'*/}
+                            {/*    width='100%'*/}
+                            {/*    height='100%'*/}
+                            {/*/>*/}
+
+
+                            <div style={{margin: "20px 0"}} align="center">
                             <div align="center" style={{display: "inherit"}}>
                                 {/*onMouseOver={()=>message.warn('search by country name')} onMouseOut={()=>message.warn('removed mouse')}*/}
                                 {/*onKeyPress={(event)=>{this.handleEnter(event)}}*/}
@@ -117,7 +126,7 @@ class Home extends Component {
                         {/*    {["ram",1,2,3,4,"52"].map((number,index)=><button>{index}.{number}</button>)}*/}
                         {/*</div>*/}
                         <div className="countryWrapper" style={{gridTemplateColumns:"repeat(5,1fr)",margin: 100}}>
-                            <h3>Favourite Countries {value}</h3>
+                            <h3>Favourite Countries</h3>
 
                             {countries.filter((country)=>country.isFavourite).map((country,index)=>
                                 <CountryCard updateCountry={()=>this.updateList()} key={index} country={country}/>)
@@ -149,11 +158,6 @@ class Home extends Component {
                             {/*}*/}
                         </div>
                     </div>
-                    </div>
-                }
-
-                }
-            </TestConsumer>
 
         );
     }
