@@ -2,6 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import {Button, Checkbox, Col, message, Row, Upload} from "antd";
 import firebase from "firebase";
 import {LoadingOutlined,PlusOutlined} from "@ant-design/icons"
+import {randomIdGenerator} from "../../config";
 
 const MultipleInput = ({addedUser}) => {
     const [imageUrl, setImageUrl] = React.useState('');
@@ -13,9 +14,7 @@ const MultipleInput = ({addedUser}) => {
 
     }, []);
 
-    const randomIdGenerator = () => {
-        return Math.random().toString(36).slice(2);
-    }
+
 
     function beforeUpload(file) {
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';

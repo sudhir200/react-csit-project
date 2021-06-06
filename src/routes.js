@@ -11,6 +11,7 @@ import FileOne from "./functionApproach/fileOne";
 import Movies from "./components/movies/movies";
 import IndUser from "./components/userDashboard/indUser";
 import login from "./components/login/login";
+import Todo from "./components/todo/todo";
 
 class Routes extends Component {
     constructor(props, context) {
@@ -41,6 +42,7 @@ class Routes extends Component {
                             <Route exact path="/user/:userId/course/:courseId" component={Users}/>
                             <Route exact path="/user/:userId" component={IndUser}/>
                             <Route exact path="/test" component={FileOne}/>
+                            <Route exact path="/todo" component={Todo}/>
                         </Switch>
                         :
                         <Switch>

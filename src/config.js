@@ -22,6 +22,9 @@ export const firebaseDbConfig =
     appId: "1:623433452626:web:0ed86e7640afc7a070a38b",
     measurementId: "G-XJFS1C28J4"
 };
+export const randomIdGenerator = () => {
+    return Math.random().toString(36).slice(2);
+}
 if (firebase.apps.length===0) {
     firebase.initializeApp(firebaseConfig);
 }else {
