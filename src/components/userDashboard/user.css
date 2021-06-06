@@ -11,7 +11,7 @@
 .userCard
 {
 
-    width:  400px;
+    min-width:  400px;
     padding: 10px;
     background: aliceblue;
     border-radius: 12px;

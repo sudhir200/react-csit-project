@@ -3,7 +3,7 @@ import {getSingleMovie, getYtsMovies} from "../../apicall/movies";
 import {BackTop, Button, Empty, Input, Modal, Pagination, Rate, Skeleton, Tag, Tooltip, Typography} from "antd";
 import "./movies.scss"
 import "./style.css"
-import {CheckCircleOutlined, DownloadOutlined, UpCircleFilled} from "@ant-design/icons"
+import {CheckCircleOutlined, DownloadOutlined, EyeOutlined, UpCircleFilled} from "@ant-design/icons"
 import YouTubePlayer from "react-player/youtube";
 
 const genres = ['biography', 'action', 'fantasy', 'mystery', 'thriller', 'drama', 'sci-fi', 'animation', 'horror', 'comedy']
@@ -24,7 +24,7 @@ class Movies extends Component {
 
     componentDidMount() {
         genres.forEach((genre) => {
-            this.getMoviesList(genre, 1, '', 10);
+            this.getMoviesList(genre, 1, '', 8);
         })
 
     }
@@ -83,39 +83,47 @@ class Movies extends Component {
                             {moviesList.get(genre) && moviesList.get(genre).movie_count && !loading.get(genre) ? moviesList.get(genre).movies.filter(movie => movie.large_cover_image).map(
                                 (movie) =>
                                     <div>
-                                        <div className="movie-card" onClick={() => {
-                                            this.setState({dialogItem: movie, openMovie: true})
-                                        }}>
-                                            <img loading="lazy" className="movie-img" src={movie.medium_cover_image}/>
-                                            <div className="movie-infos">
-                                                <span className="movie-title">{movie.title}</span><br/>
-                                                <Tooltip placement="topLeft" title={'Rating: ' + movie.rating}>
-                                                    <div>
-
-                                                        <Rate key={movie.rating} disabled defaultValue={movie.rating}/>
-                                                    </div>
-                                                </Tooltip>
+                                        <div className="movie-card" >
+                                            <img className="movie-img" src={movie.medium_cover_image}/>
+                                            <div className="movie-infos movie-info-wrapper">
+                                                <Title level={4} style={{color:"#ffffff"}}  ellipsis={{rows: 1, tooltip: true}} >{movie.title}</Title><br/>
+                                                {'Rating: ' + movie.rating}
                                                 <div className="movie-title">{movie.year}</div>
-                                                <Paragraph ellipsis={{rows: 3, tooltip: true, symbol: 'more'}}
+                                                <Paragraph ellipsis={{rows: 2, tooltip: true, symbol: 'more'}}
                                                            className="movie-description">{movie.summary}</Paragraph>
                                                 <div className="scroll-container">
-                                                    {movie.genres.map(item => <Tag color="black">{item}</Tag>)}
+                                                    {movie.genres && movie.genres.map(item => <Tag
+                                                        color="black">{item}</Tag>)}
                                                 </div>
-                                                {movie.language?<div className="scroll-container">
+                                                {movie.language ? <div className="scroll-container">
                                                     <Tag color="blue"><b>{movie.language.toUpperCase()}</b></Tag>
-                                                </div>:''}
+                                                </div> : ''}
+
                                                 <div style={{display: "grid", margin: "10px 0"}}>
                                                     <b>Torrent files</b>
                                                     <div className="scroll-container" style={{
                                                         gap: 10
                                                     }}>
 
-                                                        {movie.torrents.map((item, index) => <a href={item.url}
-                                                                                                color="black"><Button
-                                                            type="primary" style={{marginRight: 10}}
-                                                            shape="round">Link {index + 1}<DownloadOutlined/></Button></a>)}
+
+                                                        {movie.torrents.map((item, index) =>
+                                                            <Tooltip title={<div className="displayGrid">
+                                                                <div>Seeds: {item.seeds}</div>
+                                                                <div>Size: {item.size}</div>
+                                                                <div>Quality: {item.quality}</div>
+                                                                <div>Magnet link:<a href={`magnet:?xt=urn:btih:${item.hash}`}> <EyeOutlined /></a></div>
+                                                            </div>}>
+                                                                <a href={item.url}
+                                                                   color="black"><Button
+                                                                    type="primary" style={{marginRight: 10}}
+                                                                    shape="round">Link {index + 1}<DownloadOutlined/></Button></a>
+                                                            </Tooltip>
+                                                        )}
                                                     </div>
                                                 </div>
+                                                <div className="detail-button" onClick={() => {
+                                                    this.setState({dialogItem: movie, openMovie: true})
+                                                }}>View details <EyeOutlined/></div>
                                             </div>
                                         </div>
                                     </div>
@@ -137,23 +145,27 @@ class Movies extends Component {
                     <UpCircleFilled style={{fontSize: 25, color: "black"}}/>
                 </BackTop>
                 {openMovie ?
-                <Modal destroyOnClose={true} bodyStyle={{background:"#282c34"}} style={{top:10,background:"#282c34"}} afterClose={()=> this.setState({openMovie: false, dialogItem: []})} width="50%"  onCancel={() => {
-                    this.setState({openMovie: false, dialogItem: []})
-                }} footer={null} title={<Title level={3}>{dialogItem.title}</Title>}  visible={openMovie}>
-                    {openMovie ?
-                        <div className="movie-infos">
-                            {dialogItem.yt_trailer_code?
-                                <div>
-                                    <Title className="movie-description" level={4}>Watch trailer</Title>
-                                    <YouTubePlayer width={"100%"} height={500} url={`https://youtube.com/watch?v=${dialogItem.yt_trailer_code}`}/>
-                                </div>
-                                :''}
-                            <Title className="movie-description marginTop30" level={4}>Summary</Title>
-                            <span  className=" movie-description">
+                    <Modal destroyOnClose={true} bodyStyle={{background: "#282c34"}}
+                           style={{top: 10, background: "#282c34"}}
+                           afterClose={() => this.setState({openMovie: false, dialogItem: []})} width="50%"
+                           onCancel={() => {
+                               this.setState({openMovie: false, dialogItem: []})
+                           }} footer={null} title={<Title level={3}>{dialogItem.title}</Title>} visible={openMovie}>
+                        {openMovie ?
+                            <div className="movie-infos">
+                                {dialogItem.yt_trailer_code ?
+                                    <div>
+                                        <Title className="movie-description" level={4}>Watch trailer</Title>
+                                        <YouTubePlayer width={"100%"} height={500}
+                                                       url={`https://youtube.com/watch?v=${dialogItem.yt_trailer_code}`}/>
+                                    </div>
+                                    : ''}
+                                <Title className="movie-description marginTop30" level={4}>Summary</Title>
+                                <span className=" movie-description">
                                 {dialogItem.description_full}
                             </span>
-                        </div> : ''}
-                </Modal>:''}
+                            </div> : ''}
+                    </Modal> : ''}
             </div>
         );
     }

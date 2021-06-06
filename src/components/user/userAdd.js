@@ -47,8 +47,7 @@ class UserAdd extends Component {
         editUser(user.name, user.job).then(r => console.log(r)).catch(e => console.log(e))
     }
     handleChange = (e) => {
-        console.log(e.target.name)
-        console.log(e.target.value)
+
         this.setState({[e.target.name]: e.target.value})
     }
     handleExisting = (e) => {

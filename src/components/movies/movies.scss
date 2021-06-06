@@ -1,17 +1,24 @@
 
-
+.detail-button:hover
+{
+  cursor: pointer;
+  color: #2f54eb;
+  text-decoration: underline;
+}
+.detail-button
+{
+font-size: 14px;
+  color: white;
+}
 .grid-container {
-  columns: 4 10px;
+  grid-template-columns:  repeat( auto-fit, minmax(350px, 1fr) );
+  display: grid;
   column-gap: 5px;
   width: 90%;
   margin: 20px auto;
   .movie-card
   {
-    &:hover
-    {
-      cursor: pointer;
 
-    }
   }
   div {
     margin: 0 5px 5px 0;
@@ -33,7 +40,7 @@
 }
 .movie-img
 {
-  height: 350px;
+  height: 21.875em;
   width: 100%;
 }
 
@@ -44,7 +51,10 @@
   font-size: 16px;
   font-weight: bold;
 }
-
+.movie-info-wrapper
+{
+  height: 435px;
+}
 .movie-infos
 {
   background: #282c34;

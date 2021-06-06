@@ -32,7 +32,7 @@ class Header1 extends Component {
         var provider = new firebase.auth.GoogleAuthProvider();
         var token = '123';
         firebase.auth().signInWithPopup(provider).then(res => {
-                this.setState({user: res.additionalUserInfo.profile})
+                this.setState({isLogin:true,userInfo: res.additionalUserInfo.profile})
                 localStorage.setItem('userData', JSON.stringify(res.additionalUserInfo.profile))
             }
         )

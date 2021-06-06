@@ -70,10 +70,8 @@ class Users extends Component {
                         {users.map((user) =>
                             <div className="userCard">
                                 <div className="space-bwtn">
-                                    <div style={{display:"block"}}>
-                                        <Image className="user-img" src={user.avatar || null} alt="user"
-                                             draggable={false}/>
-
+                                    <div  style={{display:"block"}}>
+                                        <Image className="user-img" src={user.avatar || null} alt="user" draggable={false}/>
                                     </div>
                                     <div>
                                         <span className="header-title">{user.fName + ' ' + user.lName}</span>
