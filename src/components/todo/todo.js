@@ -63,6 +63,20 @@ class Todo extends Component {
                 console.error(error);
             });
     }
+    handleUpdateSubTask = (id, item) => {
+        console.log(id)
+        console.log(item)
+        let database = firebase.firestore();
+        database.collection("to-dos").doc(id).update(item)
+            .then((res) => {
+                this.getAllToDoList();
+            })
+            .catch((error) => {
+                console.log(error);
+
+                console.error(error);
+            });
+    }
     handleSubtasks = () => {
 
     }
@@ -108,9 +122,13 @@ class Todo extends Component {
                             <Divider/>
 
                             {item.subTasks&&item.subTasks.map((data)=><div className="displayGrid">
-                                <div className="space-between">
+                                <div className={`space-between `}>
                                     <span>{data.value || item.description}</span>
-                                    <Checkbox checked={item.checked}/>
+                                    <Checkbox onChange={(event)=>{
+                                        data.checked=event.target.checked;
+                                        this.setState({toDoList:toDoList})
+                                        this.handleUpdateSubTask(item.id,item)
+                                    }} checked={data.checked}/>
                                 </div>
                                 <Divider/>
                             </div>)}
