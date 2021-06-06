@@ -9,6 +9,14 @@
 {
     padding: 10px;
     display: grid;
+    border-radius: 20px !important;
+}
+.main-header
+{
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 21px;
+    text-transform: uppercase;
 }
 .todo-input
 {
@@ -41,6 +49,11 @@
 {
     font-size: 30px !important;
     padding:10px;
+}
+.completed-card
+{
+    background: #52c41a !important;
+    color: white !important;
 }
 .add-icon-wrap
 {

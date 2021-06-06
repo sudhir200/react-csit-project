@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {database, randomIdGenerator} from "../../config";
 import firebase from "firebase";
-import {Button, Card, Checkbox, Drawer, message} from "antd";
+import {Card, Checkbox, Divider, Drawer} from "antd";
 import "./todo.css"
 import {PlusCircleOutlined} from "@ant-design/icons"
 
@@ -31,10 +31,7 @@ class Todo extends Component {
                 console.log(res.data())
                 dbUsers.push(res.data())
             })
-            console.log('dbUsers')
-            console.log(dbUsers)
             this.setState({toDoList: dbUsers})
-            console.log(dbUsers)
 
         })
     }
@@ -45,18 +42,18 @@ class Todo extends Component {
                 this.getAllUsers();
             })
             .catch((error) => {
-                console.log(error);
 
-                console.error(error);
             });
     }
 
-    handleUpdateTask=(e)=>
-    {
+    handleUpdateTask = (id, event) => {
         let database = firebase.firestore();
-        database.collection("to-dos").doc(id).delete()
+        database.collection("to-dos").doc(id).update({
+            completed: event.target.checked,
+
+        })
             .then((res) => {
-                this.getAllUsers();
+                this.getAllToDoList();
             })
             .catch((error) => {
                 console.log(error);
@@ -74,15 +71,15 @@ class Todo extends Component {
             id: randomId,
             task: this.state.toDoAddItems.task,
             completed: false,
-            description: this.state.toDoAddItems.description
+            task1: this.state.toDoAddItems.task1,
+            task2: this.state.toDoAddItems.task2,
+            task3: this.state.toDoAddItems.task3,
 
         })
             .then((res) => {
-
+                this.getAllToDoList();
                 document.getElementById('add-task').reset();
-                console.log(res);
-                message.info('new task added')
-                this.setState({addingNew:false})
+                this.setState({addingNew: false})
             })
             .catch((error) => {
                 console.log(error);
@@ -99,13 +96,18 @@ class Todo extends Component {
             <div>
                 <div className="todoListWrapper">
                     {toDoList ? toDoList.map((item) =>
-                        <Card className="todo-card">
+                        <Card className={`todo-card ${item.completed ? `completed-card` : ``}`}>
                             <div className="space-between">
-                                <span>{item.task}</span>
-                                <Checkbox checked={item.completed}/>
+                                <span className="main-header">{item.task}</span>
+                                <Checkbox onChange={(event) => this.handleUpdateTask(item.id, event)}
+                                          checked={item.completed}/>
                             </div>
-                            <div>
-                                <span>{item.description}</span>
+                            <Divider/>
+
+                            <div className="displayGrid">
+                                <span>{item.task1||item.description}</span>
+                                <span>{item.task2||''}</span>
+                                <span>{item.task3||''}</span>
                             </div>
 
                         </Card>
@@ -130,17 +132,27 @@ class Todo extends Component {
                     key={"placement"}
                 >
                     <div className="displayGrid">
-                        <form  id="add-task" onSubmit={(e) => this.handleAddTask(e)}>
+                        <form id="add-task" onSubmit={(e) => this.handleAddTask(e)}>
                             <input onChange={(e) => {
                                 toDoAddItems.task = e.target.value
                                 this.setState({toDoAddItems: toDoAddItems})
                             }} required placeholder="please enter title" className="todo-input"
                                    value={toDoAddItems.task}/>
                             <input onChange={(e) => {
-                                toDoAddItems.description = e.target.value
+                                toDoAddItems.task1 = e.target.value
                                 this.setState({toDoAddItems: toDoAddItems})
-                            }} required placeholder="please enter description" className="todo-input"
-                                   value={toDoAddItems.description}/>
+                            }} required placeholder="please enter task 1" className="todo-input"
+                                   value={toDoAddItems.task1}/>
+                            <input onChange={(e) => {
+                                toDoAddItems.task2 = e.target.value
+                                this.setState({toDoAddItems: toDoAddItems})
+                            }}  placeholder="please enter task 2" className="todo-input"
+                                   value={toDoAddItems.task2}/>
+                            <input onChange={(e) => {
+                                toDoAddItems.task3 = e.target.value
+                                this.setState({toDoAddItems: toDoAddItems})
+                            }}  placeholder="please enter task 3" className="todo-input"
+                                   value={toDoAddItems.task3}/>
                             <button className="add-task-button">Add task</button>
                         </form>
 
