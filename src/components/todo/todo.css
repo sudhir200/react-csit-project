@@ -5,6 +5,11 @@
     display: grid;
     margin:5%;
 }
+.iconsWrapper
+{
+    vertical-align: middle;
+    margin: 30px 10px;
+}
 .todo-card
 {
     padding: 10px;

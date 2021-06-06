@@ -3,7 +3,7 @@ import {database, randomIdGenerator} from "../../config";
 import firebase from "firebase";
 import {Card, Checkbox, Divider, Drawer} from "antd";
 import "./todo.css"
-import {PlusCircleOutlined} from "@ant-design/icons"
+import {PlusCircleOutlined,DeleteOutlined,CheckOutlined} from "@ant-design/icons"
 
 class Todo extends Component {
     constructor(props) {
@@ -11,7 +11,9 @@ class Todo extends Component {
         this.state = {
             toDoAddItems: {},
             toDoList: [],
-            addingNew: false
+            subTasks: [],
+            addingNew: false,
+            canAddSubTask: true,
         }
 
     }
@@ -61,6 +63,9 @@ class Todo extends Component {
                 console.error(error);
             });
     }
+    handleSubtasks = () => {
+
+    }
     handleAddTask = (e) => {
         e.preventDefault();
         let randomId = randomIdGenerator();
@@ -71,9 +76,7 @@ class Todo extends Component {
             id: randomId,
             task: this.state.toDoAddItems.task,
             completed: false,
-            task1: this.state.toDoAddItems.task1,
-            task2: this.state.toDoAddItems.task2,
-            task3: this.state.toDoAddItems.task3,
+            subTasks:this.state.toDoAddItems.subTasks,
 
         })
             .then((res) => {
@@ -91,7 +94,7 @@ class Todo extends Component {
 
 
     render() {
-        const {toDoList, addingNew, toDoAddItems} = this.state;
+        const {toDoList,canAddSubTask, subTasks, addingNew, toDoAddItems} = this.state;
         return (
             <div>
                 <div className="todoListWrapper">
@@ -104,11 +107,13 @@ class Todo extends Component {
                             </div>
                             <Divider/>
 
-                            <div className="displayGrid">
-                                <span>{item.task1||item.description}</span>
-                                <span>{item.task2||''}</span>
-                                <span>{item.task3||''}</span>
-                            </div>
+                            {item.subTasks&&item.subTasks.map((data)=><div className="displayGrid">
+                                <div className="space-between">
+                                    <span>{data.value || item.description}</span>
+                                    <Checkbox checked={item.checked}/>
+                                </div>
+                                <Divider/>
+                            </div>)}
 
                         </Card>
                     ) : ''}
@@ -138,21 +143,55 @@ class Todo extends Component {
                                 this.setState({toDoAddItems: toDoAddItems})
                             }} required placeholder="please enter title" className="todo-input"
                                    value={toDoAddItems.task}/>
-                            <input onChange={(e) => {
-                                toDoAddItems.task1 = e.target.value
-                                this.setState({toDoAddItems: toDoAddItems})
-                            }} required placeholder="please enter task 1" className="todo-input"
-                                   value={toDoAddItems.task1}/>
-                            <input onChange={(e) => {
-                                toDoAddItems.task2 = e.target.value
-                                this.setState({toDoAddItems: toDoAddItems})
-                            }}  placeholder="please enter task 2" className="todo-input"
-                                   value={toDoAddItems.task2}/>
-                            <input onChange={(e) => {
-                                toDoAddItems.task3 = e.target.value
-                                this.setState({toDoAddItems: toDoAddItems})
-                            }}  placeholder="please enter task 3" className="todo-input"
-                                   value={toDoAddItems.task3}/>
+                            {toDoAddItems.subTasks && toDoAddItems.subTasks.map((item,index) =>
+                                <div className="space-between displayFlex">
+                                    <input key={item} onChange={(e) => {
+                                        let subtask={};
+                                        subtask.value=e.target.value;
+                                        subtask.checked=false;
+                                        toDoAddItems.subTasks[index]=subtask
+                                        this.setState({toDoAddItems: toDoAddItems})
+                                        console.log(toDoAddItems.subTasks)
+
+                                    }} required placeholder={`please enter task ${index+1}`} className="todo-input"
+                                           value={toDoAddItems.subTasks[index].value}/>
+                                           <div className="iconsWrapper">
+                                               <DeleteOutlined onClick={() => {
+                                                   toDoAddItems.subTasks.splice(index,1)
+                                                   this.setState({toDoAddItems:toDoAddItems})
+                                               }}/>
+                                               <CheckOutlined onClick={() => {
+                                                   console.log(toDoAddItems)
+                                                   this.setState({canAddSubTask:true})
+                                               }}/>
+
+                                           </div>
+                                </div>
+                         )}
+                            {canAddSubTask?<div className="space-between">
+                                <span>Add sub tasks</span>
+                                <PlusCircleOutlined onClick={() => {
+                                    console.log(toDoAddItems)
+                                    let subTasks = []
+                                    let tasks={}
+                                    if(toDoAddItems.subTasks && toDoAddItems.subTasks.length>=1)
+                                    {
+                                        console.log('if-toDoAddItems')
+                                        console.log(toDoAddItems)
+
+                                        toDoAddItems.subTasks.push(tasks)
+                                    }
+                                    else
+                                    {
+                                        console.log('else')
+                                        console.log(toDoAddItems)
+                                        subTasks.push(tasks)
+                                        toDoAddItems.subTasks=subTasks
+                                    }
+
+                                    this.setState({canAddSubTask:false,toDoAddItems: toDoAddItems})
+                                }}/>
+                            </div>:''}
                             <button className="add-task-button">Add task</button>
                         </form>
 
