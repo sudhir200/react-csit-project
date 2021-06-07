@@ -114,9 +114,9 @@ class Todo extends Component {
         const {toDoList,loading, canAddSubTask, subTasks, addingNew, toDoAddItems} = this.state;
         return (
             <div className="marginBottom100">
-                <div className="space-between">
-                    <Typography.Title style={{margin:"50px 100px"}} level={4}>To-do lists</Typography.Title>
-                    {loading?'':<div className="add-icon-wrap">
+                <div style={{margin:"50px 100px"}}  className="space-between">
+                    <Typography.Title level={4}>To-do lists</Typography.Title>
+                    {loading?'':<div>
                         <PlusCircleOutlined onClick={(e) => {
                             this.setState({addingNew: !addingNew})
                         }} className="add-icon"/>
@@ -129,7 +129,7 @@ class Todo extends Component {
                         <Card
                             style={{background: item.color ? item.color : !item.color && item.completed ? 'green' : ''}}
                             className={`todo-card ${item.completed ? `completed-card` : ``}`}>
-                            <div className="space-between">
+                            <div className="marginTop10 space-between">
                                 <span className="main-header">{item.task}</span>
                                 <Checkbox style={{color: "red"}}
                                           onChange={(event) => this.handleUpdateTask(item.id, event)}
