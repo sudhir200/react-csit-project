@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 import {database, randomIdGenerator} from "../../config";
 import firebase from "firebase";
-import {Card, Checkbox, Typography, Divider, Drawer, Dropdown, Menu, Modal, Popconfirm, Skeleton} from "antd";
+import {Card, Checkbox, Divider, Drawer, message, Modal, Popconfirm, Skeleton, Typography} from "antd";
 import "./todo.css"
-import {PlusCircleOutlined, DeleteOutlined, CheckOutlined, MenuOutlined} from "@ant-design/icons"
-import MenuItem from "antd/es/menu/MenuItem";
+import {CheckOutlined, DeleteOutlined, MenuOutlined, PlusCircleOutlined} from "@ant-design/icons"
 
 class Todo extends Component {
     constructor(props) {
@@ -14,7 +13,7 @@ class Todo extends Component {
             toDoList: [],
             subTasks: [],
             addingNew: false,
-            loading:false,
+            loading: false,
             changeColor: new Map(),
             canAddSubTask: true,
         }
@@ -28,22 +27,23 @@ class Todo extends Component {
 
     getAllToDoList = () => {
         let dbUsers = [];
-        this.setState({loading:true})
+        this.setState({loading: true})
         database.collection('to-dos').get().then((res) => {
 
             res.forEach(res => {
-                console.log('---to-do data-----')
                 console.log(res.data())
                 dbUsers.push(res.data())
             })
-            this.setState({loading:false,toDoList: dbUsers})
+            this.setState({loading: false, toDoList: dbUsers})
 
         })
     }
     handleDelete = (id) => {
         let database = firebase.firestore();
+        //delete/id
         database.collection("to-dos").doc(id).delete()
             .then((res) => {
+                message.success('deleted!')
                 this.state.changeColor.set(id, false)
                 this.setState({changeColor: this.state.changeColor})
                 this.getAllToDoList();
@@ -70,6 +70,7 @@ class Todo extends Component {
     }
     handleUpdateSubTask = (id, item) => {
         let database = firebase.firestore();
+        item.updatedAt = Date.now();
         database.collection("to-dos").doc(id).update(item)
             .then((res) => {
                 this.getAllToDoList();
@@ -87,15 +88,19 @@ class Todo extends Component {
         e.preventDefault();
         let randomId = randomIdGenerator();
         let database = firebase.firestore();
-        database.collection("to-dos").doc(randomId).set({
+        let itemToAdd=this.state.toDoAddItems;
+        let obj = {
             id: randomId,
-            task: this.state.toDoAddItems.task,
+            task: itemToAdd.task,
             completed: false,
+            dueDate: itemToAdd.dueDate,
             createdDate: Date.now(),
-            color: this.state.toDoAddItems.color||'aliceblue',
-            subTasks: this.state.toDoAddItems.subTasks,
+            color: itemToAdd.color || 'aliceblue',
+            subTasks: itemToAdd.subTasks,
 
-        })
+        }
+        console.log(obj)
+        database.collection("to-dos").doc().set(obj)
             .then((res) => {
                 this.getAllToDoList();
                 document.getElementById('add-task').reset();
@@ -111,19 +116,19 @@ class Todo extends Component {
 
 
     render() {
-        const {toDoList,loading, canAddSubTask, subTasks, addingNew, toDoAddItems} = this.state;
+        const {toDoList, loading, canAddSubTask, subTasks, addingNew, toDoAddItems} = this.state;
         return (
             <div className="marginBottom100">
-                <div style={{margin:"50px 100px"}}  className="space-between">
+                <div style={{margin: "50px 100px"}} className="space-between">
                     <Typography.Title level={4}>To-do lists</Typography.Title>
-                    {loading?'':<div>
+                    {loading ? '' : <div>
                         <PlusCircleOutlined onClick={(e) => {
                             this.setState({addingNew: !addingNew})
                         }} className="add-icon"/>
                     </div>}
                 </div>
                 <div className="todoListWrapper">
-                    {loading? [0, 1, 2, 3, 4, 5].map(item => (
+                    {loading ? [0, 1, 2, 3, 4, 5].map(item => (
                         <Skeleton active={true}/>)) : ''}
                     {toDoList && !loading ? toDoList.map((item) =>
                         <Card
@@ -136,6 +141,8 @@ class Todo extends Component {
                                           checked={item.completed}/>
                             </div>
                             <Divider/>
+                            {item.dueDate?<b>To be completed by {item.dueDate}</b>:''}
+                            <Divider/>
                             {item.subTasks && item.subTasks.map((data) => <div className="displayGrid">
                                 <div className={`space-between `}>
                                     <span style={{
@@ -144,6 +151,7 @@ class Todo extends Component {
                                     }} className="subtask">{data.value || item.description}</span>
                                     <Checkbox onChange={(event) => {
                                         data.checked = event.target.checked;
+                                        // data.value='test subtask update';
                                         this.setState({toDoList: toDoList})
                                         this.handleUpdateSubTask(item.id, item)
                                     }} checked={data.checked}/>
@@ -164,14 +172,16 @@ class Todo extends Component {
                                             this.state.changeColor.set(item.id, !this.state.changeColor.get(item.id))
                                             this.setState({changeColor: this.state.changeColor})
                                         }
-                                        } onOk={() => {
-                                        this.handleUpdateSubTask(item.id, item)
-                                        this.state.changeColor.set(item.id, !this.state.changeColor.get(item.id))
-                                        this.setState({changeColor: this.state.changeColor})
-                                    }}
+                                        }
+                                        onOk={() => {
+                                            this.handleUpdateSubTask(item.id, item)
+                                            this.state.changeColor.set(item.id, !this.state.changeColor.get(item.id))
+                                            this.setState({changeColor: this.state.changeColor})
+                                        }}
                                         visible={this.state.changeColor.get(item.id)} className="displayGrid">
                                         <h5>Change Color</h5>
-                                        <input type="color" id="body" value={item.color} name="body" defaultValue="#f6b73c"
+                                        <input type="color" id="body" value={item.color} name="body"
+                                               defaultValue="#f6b73c"
                                                onChange={(e) => {
                                                    item.color = e.target.value;
                                                    this.setState({toDoList: toDoList})
@@ -182,7 +192,7 @@ class Todo extends Component {
                                         }} placeholder="please enter remarks" className="todo-input"
                                                value={item.remarks}/>
                                         <Popconfirm
-                                            placement="left"
+                                            placement="right"
                                             title={`Are you sure to delete this task`}
                                             onConfirm={() => this.handleDelete(item.id)}
                                             okText="Yes"
@@ -207,9 +217,9 @@ class Todo extends Component {
 
                 <Drawer
                     title="Add new task"
-                    placement={window.innerWidth<700?"bottom":"right"}
-                    width={window.innerWidth>700?"700px":"100%"}
-                    height={window.innerWidth>700?"100%":"95%"}
+                    placement={window.innerWidth < 700 ? "bottom" : "right"}
+                    width={window.innerWidth > 700 ? "700px" : "100%"}
+                    height={window.innerWidth > 700 ? "100%" : "95%"}
                     style={{}}
                     closable={false}
                     onClose={() => this.setState({addingNew: false})}
@@ -223,6 +233,12 @@ class Todo extends Component {
                                 this.setState({toDoAddItems: toDoAddItems})
                             }} required placeholder="please enter title" className="todo-input"
                                    value={toDoAddItems.task}/>
+                            <h3>Due date</h3>
+                            <input type="date" onChange={(e) => {
+                                toDoAddItems.dueDate = e.target.value
+                                this.setState({toDoAddItems: toDoAddItems})
+                            }} required placeholder="please enter title" className="todo-input"
+                                   value={toDoAddItems.dueDate}/>
                             {toDoAddItems.subTasks && toDoAddItems.subTasks.map((item, index) =>
                                 <div className="space-between displayFlex">
                                     <input key={item} onChange={(e) => {
@@ -269,7 +285,8 @@ class Todo extends Component {
                                 </div> : ''}
                             <div>
                                 <h5>Change Color</h5>
-                                <input required type="color" id="body" name="body" defaultValue="#f6b73c" value={toDoAddItems.color}
+                                <input required type="color" id="body" name="body" defaultValue="#f6b73c"
+                                       value={toDoAddItems.color}
                                        onChange={(e) => {
                                            toDoAddItems.color = e.target.value;
                                            this.setState({toDoAddItems: toDoAddItems})
