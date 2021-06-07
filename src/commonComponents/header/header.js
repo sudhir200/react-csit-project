@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import {SmileOutlined} from "@ant-design/icons"
+import {LogoutOutlined, SmileOutlined} from "@ant-design/icons"
 import "./style.css"
 import {Link} from "react-router-dom";
-import {Avatar, Button, Popover} from "antd";
+import {Avatar, Button, Dropdown, Popover} from "antd";
 import {TestContext as UserContext} from "../../components/context/testContext"
 import firebase from "firebase";
 
@@ -64,15 +64,15 @@ class Header1 extends Component {
                     <div style={{paddingTop: 30, marginRight: 10}}>
 
                         {this.state.isLogin ?
-                            <Popover trigger="click" content={
+                            <Dropdown trigger="click" overlay={
                                 <div>
                                     <Button onClick={()=>{
                                         localStorage.clear();
                                         window.location.href="/";
-                                    }}>Logout</Button>
+                                    }}><LogoutOutlined/> Logout</Button>
                                 </div>} title={null}>
                                 <Avatar src={userInfo.picture}/>
-                            </Popover> :
+                            </Dropdown> :
                             <Button onClick={() => this.handleLogin()} type="primary">Login</Button>}
                     </div>
 

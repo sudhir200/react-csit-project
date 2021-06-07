@@ -14,6 +14,7 @@ class Users extends Component {
         super(props, context);
         this.state = {
             users: [],
+            loading:false,
             addUser: false
         }
     }
@@ -25,16 +26,14 @@ class Users extends Component {
     getAllUsers = () => {
 
         let dbUsers = [];
+        this.setState({loading:true})
 
         database.collection('users').get().then((res) => {
-
             res.forEach(res => {
                 console.log(res.data())
                 dbUsers.push(res.data())
             })
-            this.setState({users: dbUsers})
-            console.log(dbUsers)
-
+            this.setState({loading:false,users: dbUsers})
         })
     }
     updateUser = (res) => {
@@ -57,14 +56,14 @@ class Users extends Component {
     }
 
     render() {
-        const {users} = this.state;
+        const {users,loading} = this.state;
         return (
             <div>
                 <div className="paddingLeftRight20 space-between">
                     <h2>Users</h2>
                     <Button onClick={() => this.setState({addUser: true})}>Add User</Button>
                 </div>
-                {users.length ?
+                {users.length && !loading?
                     <div className="userWrapper">
 
                         {users.map((user) =>
@@ -91,7 +90,7 @@ class Users extends Component {
                                         okText="Yes"
                                         cancelText="No"
                                     >
-                                    <DeleteOutlined className="delete-icon"/>
+                                      <DeleteOutlined className="delete-icon"/>
                                     </Popconfirm>
 
 

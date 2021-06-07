@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {database, randomIdGenerator} from "../../config";
 import firebase from "firebase";
-import {Card, Checkbox, Divider, Drawer} from "antd";
+import {Card, Checkbox, Typography, Divider, Drawer, Dropdown, Menu, Modal, Popconfirm, Skeleton} from "antd";
 import "./todo.css"
-import {PlusCircleOutlined,DeleteOutlined,CheckOutlined} from "@ant-design/icons"
+import {PlusCircleOutlined, DeleteOutlined, CheckOutlined, MenuOutlined} from "@ant-design/icons"
+import MenuItem from "antd/es/menu/MenuItem";
 
 class Todo extends Component {
     constructor(props) {
@@ -13,6 +14,8 @@ class Todo extends Component {
             toDoList: [],
             subTasks: [],
             addingNew: false,
+            loading:false,
+            changeColor: new Map(),
             canAddSubTask: true,
         }
 
@@ -25,7 +28,7 @@ class Todo extends Component {
 
     getAllToDoList = () => {
         let dbUsers = [];
-
+        this.setState({loading:true})
         database.collection('to-dos').get().then((res) => {
 
             res.forEach(res => {
@@ -33,7 +36,7 @@ class Todo extends Component {
                 console.log(res.data())
                 dbUsers.push(res.data())
             })
-            this.setState({toDoList: dbUsers})
+            this.setState({loading:false,toDoList: dbUsers})
 
         })
     }
@@ -41,7 +44,9 @@ class Todo extends Component {
         let database = firebase.firestore();
         database.collection("to-dos").doc(id).delete()
             .then((res) => {
-                this.getAllUsers();
+                this.state.changeColor.set(id, false)
+                this.setState({changeColor: this.state.changeColor})
+                this.getAllToDoList();
             })
             .catch((error) => {
 
@@ -64,8 +69,6 @@ class Todo extends Component {
             });
     }
     handleUpdateSubTask = (id, item) => {
-        console.log(id)
-        console.log(item)
         let database = firebase.firestore();
         database.collection("to-dos").doc(id).update(item)
             .then((res) => {
@@ -84,13 +87,13 @@ class Todo extends Component {
         e.preventDefault();
         let randomId = randomIdGenerator();
         let database = firebase.firestore();
-        console.log(this.state.toDoAddItems.task)
-        console.log(this.state.toDoAddItems.description)
         database.collection("to-dos").doc(randomId).set({
             id: randomId,
             task: this.state.toDoAddItems.task,
             completed: false,
-            subTasks:this.state.toDoAddItems.subTasks,
+            createdDate: Date.now(),
+            color: this.state.toDoAddItems.color||'aliceblue',
+            subTasks: this.state.toDoAddItems.subTasks,
 
         })
             .then((res) => {
@@ -108,46 +111,105 @@ class Todo extends Component {
 
 
     render() {
-        const {toDoList,canAddSubTask, subTasks, addingNew, toDoAddItems} = this.state;
+        const {toDoList,loading, canAddSubTask, subTasks, addingNew, toDoAddItems} = this.state;
         return (
-            <div>
-                <div className="todoListWrapper">
-                    {toDoList ? toDoList.map((item) =>
-                        <Card className={`todo-card ${item.completed ? `completed-card` : ``}`}>
-                            <div className="space-between">
-                                <span className="main-header">{item.task}</span>
-                                <Checkbox onChange={(event) => this.handleUpdateTask(item.id, event)}
-                                          checked={item.completed}/>
-                            </div>
-                            <Divider/>
-
-                            {item.subTasks&&item.subTasks.map((data)=><div className="displayGrid">
-                                <div className={`space-between `}>
-                                    <span>{data.value || item.description}</span>
-                                    <Checkbox onChange={(event)=>{
-                                        data.checked=event.target.checked;
-                                        this.setState({toDoList:toDoList})
-                                        this.handleUpdateSubTask(item.id,item)
-                                    }} checked={data.checked}/>
-                                </div>
-                                <Divider/>
-                            </div>)}
-
-                        </Card>
-                    ) : ''}
-                    <div className="add-icon-wrap">
+            <div className="marginBottom100">
+                <div className="space-between">
+                    <Typography.Title style={{margin:"50px 100px"}} level={4}>To-do lists</Typography.Title>
+                    {loading?'':<div className="add-icon-wrap">
                         <PlusCircleOutlined onClick={(e) => {
                             this.setState({addingNew: !addingNew})
                         }} className="add-icon"/>
-                    </div>
+                    </div>}
+                </div>
+                <div className="todoListWrapper">
+                    {loading? [0, 1, 2, 3, 4, 5].map(item => (
+                        <Skeleton active={true}/>)) : ''}
+                    {toDoList && !loading ? toDoList.map((item) =>
+                        <Card
+                            style={{background: item.color ? item.color : !item.color && item.completed ? 'green' : ''}}
+                            className={`todo-card ${item.completed ? `completed-card` : ``}`}>
+                            <div className="space-between">
+                                <span className="main-header">{item.task}</span>
+                                <Checkbox style={{color: "red"}}
+                                          onChange={(event) => this.handleUpdateTask(item.id, event)}
+                                          checked={item.completed}/>
+                            </div>
+                            <Divider/>
+                            {item.subTasks && item.subTasks.map((data) => <div className="displayGrid">
+                                <div className={`space-between `}>
+                                    <span style={{
+                                        color: data.checked ? 'black' : '',
+                                        textDecoration: data.checked ? 'line-through' : ''
+                                    }} className="subtask">{data.value || item.description}</span>
+                                    <Checkbox onChange={(event) => {
+                                        data.checked = event.target.checked;
+                                        this.setState({toDoList: toDoList})
+                                        this.handleUpdateSubTask(item.id, item)
+                                    }} checked={data.checked}/>
+                                </div>
+
+                                <Divider/>
+                            </div>)}
+                            <div>
+                                {item.remarks ? <span className="subtask">Remarks: {item.remarks}</span> : ''}
+
+                            </div>
+
+                            <div className="dropdown-wrap space-between">
+
+                                {this.state.changeColor.get(item.id) ?
+                                    <Modal
+                                        onCancel={() => {
+                                            this.state.changeColor.set(item.id, !this.state.changeColor.get(item.id))
+                                            this.setState({changeColor: this.state.changeColor})
+                                        }
+                                        } onOk={() => {
+                                        this.handleUpdateSubTask(item.id, item)
+                                        this.state.changeColor.set(item.id, !this.state.changeColor.get(item.id))
+                                        this.setState({changeColor: this.state.changeColor})
+                                    }}
+                                        visible={this.state.changeColor.get(item.id)} className="displayGrid">
+                                        <h5>Change Color</h5>
+                                        <input type="color" id="body" value={item.color} name="body" defaultValue="#f6b73c"
+                                               onChange={(e) => {
+                                                   item.color = e.target.value;
+                                                   this.setState({toDoList: toDoList})
+                                               }}/>
+                                        <input onChange={(e) => {
+                                            item.remarks = e.target.value
+                                            this.setState({toDoList: toDoList})
+                                        }} placeholder="please enter remarks" className="todo-input"
+                                               value={item.remarks}/>
+                                        <Popconfirm
+                                            placement="left"
+                                            title={`Are you sure to delete this task`}
+                                            onConfirm={() => this.handleDelete(item.id)}
+                                            okText="Yes"
+                                            cancelText="No"
+                                        >
+                                            <DeleteOutlined/>
+                                        </Popconfirm>
+
+                                    </Modal> : ''}
+
+                                <MenuOutlined onClick={() => {
+                                    this.state.changeColor.set(item.id, !this.state.changeColor.get(item.id))
+                                    this.setState({changeColor: this.state.changeColor})
+                                }} className="menu-icon"/>
+                            </div>
+                        </Card>
+                    ) : ''}
+
 
                 </div>
 
 
                 <Drawer
-                    title="Basic Drawer"
-                    placement={"right"}
-                    width="700px"
+                    title="Add new task"
+                    placement={window.innerWidth<700?"bottom":"right"}
+                    width={window.innerWidth>700?"700px":"100%"}
+                    height={window.innerWidth>700?"100%":"95%"}
                     style={{}}
                     closable={false}
                     onClose={() => this.setState({addingNew: false})}
@@ -161,56 +223,59 @@ class Todo extends Component {
                                 this.setState({toDoAddItems: toDoAddItems})
                             }} required placeholder="please enter title" className="todo-input"
                                    value={toDoAddItems.task}/>
-                            {toDoAddItems.subTasks && toDoAddItems.subTasks.map((item,index) =>
+                            {toDoAddItems.subTasks && toDoAddItems.subTasks.map((item, index) =>
                                 <div className="space-between displayFlex">
                                     <input key={item} onChange={(e) => {
-                                        let subtask={};
-                                        subtask.value=e.target.value;
-                                        subtask.checked=false;
-                                        toDoAddItems.subTasks[index]=subtask
+                                        let subtask = {};
+                                        subtask.value = e.target.value;
+                                        subtask.checked = false;
+                                        toDoAddItems.subTasks[index] = subtask
                                         this.setState({toDoAddItems: toDoAddItems})
-                                        console.log(toDoAddItems.subTasks)
-
-                                    }} required placeholder={`please enter task ${index+1}`} className="todo-input"
+                                    }} required placeholder={`please enter task ${index + 1}`} className="todo-input"
                                            value={toDoAddItems.subTasks[index].value}/>
-                                           <div className="iconsWrapper">
-                                               <DeleteOutlined onClick={() => {
-                                                   toDoAddItems.subTasks.splice(index,1)
-                                                   this.setState({toDoAddItems:toDoAddItems})
-                                               }}/>
-                                               <CheckOutlined onClick={() => {
-                                                   console.log(toDoAddItems)
-                                                   this.setState({canAddSubTask:true})
-                                               }}/>
+                                    <div className="iconsWrapper">
+                                        <DeleteOutlined onClick={() => {
+                                            toDoAddItems.subTasks.splice(index, 1)
+                                            this.setState({toDoAddItems: toDoAddItems})
+                                        }}/>
+                                        <CheckOutlined onClick={() => {
+                                            console.log(toDoAddItems)
+                                            this.setState({canAddSubTask: true})
+                                        }}/>
 
-                                           </div>
+                                    </div>
                                 </div>
-                         )}
-                            {canAddSubTask?<div className="space-between">
-                                <span>Add sub tasks</span>
-                                <PlusCircleOutlined onClick={() => {
-                                    console.log(toDoAddItems)
-                                    let subTasks = []
-                                    let tasks={}
-                                    if(toDoAddItems.subTasks && toDoAddItems.subTasks.length>=1)
-                                    {
-                                        console.log('if-toDoAddItems')
-                                        console.log(toDoAddItems)
+                            )}
 
-                                        toDoAddItems.subTasks.push(tasks)
-                                    }
-                                    else
-                                    {
-                                        console.log('else')
+                            {canAddSubTask ?
+                                <div className="space-between marginBottom100">
+                                    <span>Add sub tasks</span>
+                                    <PlusCircleOutlined onClick={() => {
                                         console.log(toDoAddItems)
-                                        subTasks.push(tasks)
-                                        toDoAddItems.subTasks=subTasks
-                                    }
+                                        let subTasks = []
+                                        let tasks = {}
+                                        if (toDoAddItems.subTasks && toDoAddItems.subTasks.length >= 1) {
+                                            console.log('if-toDoAddItems')
+                                            console.log(toDoAddItems)
 
-                                    this.setState({canAddSubTask:false,toDoAddItems: toDoAddItems})
-                                }}/>
-                            </div>:''}
-                            <button className="add-task-button">Add task</button>
+                                            toDoAddItems.subTasks.push(tasks)
+                                        } else {
+                                            subTasks.push(tasks)
+                                            toDoAddItems.subTasks = subTasks
+                                        }
+
+                                        this.setState({canAddSubTask: false, toDoAddItems: toDoAddItems})
+                                    }}/>
+                                </div> : ''}
+                            <div>
+                                <h5>Change Color</h5>
+                                <input required type="color" id="body" name="body" defaultValue="#f6b73c" value={toDoAddItems.color}
+                                       onChange={(e) => {
+                                           toDoAddItems.color = e.target.value;
+                                           this.setState({toDoAddItems: toDoAddItems})
+                                       }}/>
+                            </div>
+                            <button className="add-task-button marginTop30">Add task</button>
                         </form>
 
                     </div>

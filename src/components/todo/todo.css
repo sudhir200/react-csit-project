@@ -1,9 +1,18 @@
 .todoListWrapper
 {
-    grid-template-columns: repeat(3,1fr);
+    grid-template-columns: repeat(6,1fr);
     gap:20px;
     display: grid;
-    margin:5%;
+    margin:5% 5% 20% 5%;
+}
+.marginBottom100
+{
+    margin-bottom: 100px;
+}
+.subtask
+{
+    font-weight: bold;
+    letter-spacing: 0.5px;
 }
 .iconsWrapper
 {
@@ -14,6 +23,9 @@
 {
     padding: 10px;
     display: grid;
+    max-height: 400px;
+    overflow: scroll;
+    position: relative !important;
     border-radius: 20px !important;
 }
 .main-header
@@ -55,10 +67,21 @@
     font-size: 30px !important;
     padding:10px;
 }
+.menu-icon
+{
+
+}
+.dropdown-wrap
+{
+    position: absolute;
+    top: 10px;
+    right:10px;
+}
 .completed-card
 {
-    background: #52c41a !important;
+    background: #71B280 ;
     color: white !important;
+    box-shadow: 1px 10px lightgrey;
 }
 .add-icon-wrap
 {
