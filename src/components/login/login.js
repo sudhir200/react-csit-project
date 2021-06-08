@@ -3,10 +3,13 @@ import {Avatar, Typography, Button, Card, Divider, Input} from "antd";
 import firebase from "firebase";
 import "./login.css"
 import {UserOutlined,EyeTwoTone,EyeInvisibleOutlined,LockOutlined,GoogleOutlined,FacebookOutlined} from "@ant-design/icons"
+import {eventAnalyst} from "../../utilFunctions/analytics";
 const { Title } = Typography;
 
 class Login extends Component {
+
     handleLogin = (socialType) => {
+        eventAnalyst('login','clicked_login','','initiated')
         let provider;
         if(socialType==='f')
         {
@@ -21,11 +24,18 @@ class Login extends Component {
         }
         var token = '123';
         firebase.auth().signInWithPopup(provider).then(res => {
-                this.setState({user: res.additionalUserInfo.profile})
+            eventAnalyst('login','clicked_login','success',`login success for user ${res.additionalUserInfo.profile.id}`)
+            this.setState({user: res.additionalUserInfo.profile})
                 localStorage.setItem('userData', JSON.stringify(res.additionalUserInfo.profile))
                 window.location.reload();
             }
-        )
+        ).catch(err=>
+        {
+            console.log('err')
+            console.log(err)
+            eventAnalyst('login','clicked_login','failure',`login failed`)
+
+        })
     }
     render() {
         const buttonStyle= {height:56,borderRadius:6,fontWeight:"bolder"}
