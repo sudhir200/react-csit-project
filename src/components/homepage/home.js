@@ -9,6 +9,7 @@ import QuoteCard from "../../commonComponents/quoteCard/quoteCard";
 import {TestConsumer} from "../context/testContext";
 import ReactPlayer from 'react-player/youtube'
 import Header1 from "../../commonComponents/header/header";
+import {eventAnalyst} from "../../utilFunctions/analytics";
 
 class Home extends Component {
     constructor() {
@@ -24,6 +25,7 @@ class Home extends Component {
 
     componentDidMount() {
         console.log('componentDidMount...')
+        document.title="Home";
         this.getAllCountries()
     }
 
@@ -37,6 +39,8 @@ class Home extends Component {
 
         console.log('getAllCountries...')
         this.setState({loading:true})
+        eventAnalyst('countries','fetch_countries','initiated',``)
+
         if(!this.state.countries.length>0)
         {
             getCountries().then(r => {
@@ -45,6 +49,8 @@ class Home extends Component {
                 console.log(r)
                 localStorage.setItem('countries-list',JSON.stringify(r.data))
                 this.setState({countries: r.data})
+                eventAnalyst('countries','fetch_countries_success','initiated',`fetch countries success`)
+
             }).catch(err => {
                 console.log('error...')
 

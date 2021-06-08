@@ -23,6 +23,7 @@ class Movies extends Component {
     }
 
     componentDidMount() {
+        document.title="Movies";
         genres.forEach((genre) => {
             this.getMoviesList(genre, 1, '', 8);
         })

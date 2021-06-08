@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import {Avatar, Button, Dropdown, Popover} from "antd";
 import {TestContext as UserContext} from "../../components/context/testContext"
 import firebase from "firebase";
+import {eventAnalyst} from "../../utilFunctions/analytics";
 
 class Header1 extends Component {
     static contextType = UserContext;
@@ -31,8 +32,9 @@ class Header1 extends Component {
     handleLogin = () => {
         var provider = new firebase.auth.GoogleAuthProvider();
         var token = '123';
+
         firebase.auth().signInWithPopup(provider).then(res => {
-                this.setState({isLogin:true,userInfo: res.additionalUserInfo.profile})
+            this.setState({isLogin:true,userInfo: res.additionalUserInfo.profile})
                 localStorage.setItem('userData', JSON.stringify(res.additionalUserInfo.profile))
             }
         )
@@ -67,6 +69,7 @@ class Header1 extends Component {
                             <Dropdown trigger="click" overlay={
                                 <div>
                                     <Button onClick={()=>{
+                                        eventAnalyst('logout','logout_success','success',``)
                                         localStorage.clear();
                                         window.location.href="/";
                                     }}><LogoutOutlined/> Logout</Button>

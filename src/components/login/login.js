@@ -7,6 +7,9 @@ import {eventAnalyst} from "../../utilFunctions/analytics";
 const { Title } = Typography;
 
 class Login extends Component {
+    componentDidMount() {
+        document.title="Login page";
+    }
 
     handleLogin = (socialType) => {
         eventAnalyst('login','clicked_login','','initiated')

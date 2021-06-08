@@ -20,6 +20,7 @@ class Users extends Component {
     }
 
     componentDidMount() {
+        document.title="Users";
         this.getAllUsers();
     }
 

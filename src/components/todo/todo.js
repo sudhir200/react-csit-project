@@ -22,6 +22,7 @@ class Todo extends Component {
 
 
     componentDidMount() {
+        document.title="To-Do";
         this.getAllToDoList()
     }
 
