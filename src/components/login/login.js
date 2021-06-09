@@ -4,6 +4,7 @@ import firebase from "firebase";
 import "./login.css"
 import {UserOutlined,EyeTwoTone,EyeInvisibleOutlined,LockOutlined,GoogleOutlined,FacebookOutlined} from "@ant-design/icons"
 import {eventAnalyst} from "../../utilFunctions/analytics";
+import Grid from "@material-ui/core/Grid";
 const { Title } = Typography;
 
 class Login extends Component {
@@ -25,7 +26,6 @@ class Login extends Component {
 
             provider = new firebase.auth.GoogleAuthProvider();
         }
-        var token = '123';
         firebase.auth().signInWithPopup(provider).then(res => {
             eventAnalyst('login','clicked_login','success',`login success for user ${res.additionalUserInfo.profile.id}`)
             this.setState({user: res.additionalUserInfo.profile})
@@ -77,6 +77,7 @@ class Login extends Component {
                     </div>
 
                 </section>
+
                 {/*<div className="login-page-wrapper">*/}
 
 

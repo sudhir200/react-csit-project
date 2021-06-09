@@ -1,6 +1,19 @@
 import React, {Component} from 'react';
 import {getSingleMovie, getYtsMovies} from "../../apicall/movies";
-import {BackTop, Button, Empty, Input, Modal, Pagination, Rate, Skeleton, Tag, Tooltip, Typography} from "antd";
+import {
+    BackTop,
+    Button,
+    Empty,
+    Input,
+    message,
+    Modal,
+    Pagination,
+    Rate,
+    Skeleton,
+    Tag,
+    Tooltip,
+    Typography
+} from "antd";
 import "./movies.scss"
 import "./style.css"
 import {CheckCircleOutlined, DownloadOutlined, EyeOutlined, UpCircleFilled} from "@ant-design/icons"
@@ -37,6 +50,9 @@ class Movies extends Component {
             this.state.moviesList.set(genre, res)
             this.state.loading.set(genre, false)
             this.setState({loading: this.state.loading, moviesList: this.state.moviesList})
+        }).catch(err=>
+        {
+            message.warn(`could not fetch movies for ${genre}`)
         })
     }
 
