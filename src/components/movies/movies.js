@@ -19,7 +19,7 @@ import "./style.css"
 import {CheckCircleOutlined, DownloadOutlined, EyeOutlined, UpCircleFilled} from "@ant-design/icons"
 import YouTubePlayer from "react-player/youtube";
 
-const genres = ['biography', 'action', 'fantasy', 'mystery', 'thriller', 'drama', 'sci-fi', 'animation', 'horror', 'comedy']
+const genres = [ 'mystery', 'thriller', 'drama', 'sci-fi', 'animation', 'horror', 'comedy','biography', 'action', 'fantasy']
 
 const {Title, Paragraph} = Typography;
 const {Search} = Input;
@@ -83,7 +83,7 @@ class Movies extends Component {
 
                         <div className="titleWrapper space-between">
                             <Title level={2}>{genre.toUpperCase()}</Title>
-                            <Search allowClear style={{width: "25%"}} placeholder={`search movies in ${genre}`}
+                            <Search className="movieSearchInput" allowClear style={{width: "25%"}} placeholder={`search movies in ${genre}`}
                                     onSearch={(searchTxt) => {
                                         this.getMoviesList(genre, 1, searchTxt, 20)
                                     }} enterButton/>
@@ -101,7 +101,7 @@ class Movies extends Component {
                                 (movie) =>
                                     <div>
                                         <div className="movie-card" >
-                                            <img className="movie-img" src={movie.medium_cover_image}/>
+                                            <img draggable={false} alt={""} className="movie-img" src={movie.medium_cover_image}/>
                                             <div className="movie-infos movie-info-wrapper">
                                                 <Title level={4} style={{color:"#ffffff"}}  ellipsis={{rows: 1, tooltip: true}} >{movie.title}</Title><br/>
                                                 {'Rating: ' + movie.rating}

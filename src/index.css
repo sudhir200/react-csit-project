@@ -1,11 +1,23 @@
+@font-face
+{
+  font-family: 'NutinoLight';
+  src:url("./fonts/NunitoSans-Light.ttf");
+}
+@font-face
+{
+  font-family: 'NutinoMedium';
+  src:url("./fonts/NunitoSans-SemiBold.ttf");
+}
+@font-face
+{
+  font-family: 'NutinoBold';
+  src:url("./fonts/NunitoSans-Bold.ttf");
+}
+
 body {
   margin: 0;
-  font-family: 'Poppins', sans-serif !important;
+  font-family: 'NutinoLight', sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}

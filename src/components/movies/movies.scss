@@ -11,7 +11,7 @@ font-size: 14px;
   color: white;
 }
 .grid-container {
-  grid-template-columns:  repeat( auto-fit, minmax(350px, 1fr) );
+  grid-template-columns:  repeat( auto-fit, minmax(300px, 1fr) );
   display: grid;
   column-gap: 5px;
   width: 90%;
@@ -49,7 +49,7 @@ font-size: 14px;
 .movie-title
 {
   font-size: 16px;
-  font-weight: bold;
+  font-family: 'NutinoBold',sans-serif;
 }
 .movie-info-wrapper
 {
@@ -79,11 +79,18 @@ font-size: 14px;
 }
 @media screen and (max-width: 700px) {
 
-
+  .titleWrapper
+  {
+    line-height: 2;
+  }
   .grid-container
   {
     columns: 1 10px;
 
+  }
+  .movieSearchInput
+  {
+    width:100% !important;
   }
 }
 
