@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import "./movies.scss"
+import "./movies.css"
 import {getMovies, getSingleMovie} from "../../apicall/movies";
 import {Typography, Skeleton, message} from "antd";
 const { Title,Paragraph } = Typography;

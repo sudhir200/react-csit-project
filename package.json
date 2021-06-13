@@ -1,5 +1,5 @@
 {
-  "homepage": "https://sudhir200.github.io/react-csit-project/",
+  "homepage": "https://sudhir200.github.io/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -12,7 +12,6 @@
     "antd": "^4.15.2",
     "axios": "^0.21.1",
     "firebase": "^8.6.3",
-    "node-sass": "^6.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-player": "^2.9.0",
@@ -20,7 +19,6 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "redux": "^4.1.0",
-    "sass-loader": "^10",
     "web-vitals": "^1.1.1"
   },
   "scripts": {

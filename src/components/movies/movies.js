@@ -14,7 +14,7 @@ import {
     Tooltip,
     Typography
 } from "antd";
-import "./movies.scss"
+import "./movies.css"
 import "./style.css"
 import {CheckCircleOutlined, DownloadOutlined, EyeOutlined, UpCircleFilled} from "@ant-design/icons"
 import YouTubePlayer from "react-player/youtube";

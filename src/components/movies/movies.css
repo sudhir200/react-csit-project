@@ -16,24 +16,16 @@ font-size: 14px;
   column-gap: 5px;
   width: 90%;
   margin: 20px auto;
-  .movie-card
-  {
 
-  }
-  div {
-    margin: 0 5px 5px 0;
-    display: inline-block;
-    width: 100%;
-    padding: 5px;
-    transition: all .25s ease-in-out;
 
-     img {
-      width: 100%;
-      transition: all .25s ease-in-out;
-    }
-
-  }
 }
+
+
+img {
+  width: 100%;
+  transition: all .25s ease-in-out;
+}
+
 .titleWrapper
 {
   margin:5% 5%;
