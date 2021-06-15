@@ -12,6 +12,8 @@ import Movies from "./components/movies/movies";
 import IndUser from "./components/userDashboard/indUser";
 import login from "./components/login/login";
 import Todo from "./components/todo/todo";
+import ClassExample from "./components/Class/classExample";
+import FunctionExample from "./components/Function/functionExample";
 
 class Routes extends Component {
     constructor(props, context) {
@@ -36,6 +38,8 @@ class Routes extends Component {
 
                             <Route exact path="/" component={Home}/>
                             <Route exact path="/about" component={About}/>
+                            <Route exact path="/class" component={ClassExample}/>
+                            <Route exact path="/function" component={FunctionExample}/>
                             <Route exact path="/movies" component={Movies}/>
                             <Route exact path="/users" component={Users}/>
                             <Route exact path="/user/add" component={UserAdd}/>

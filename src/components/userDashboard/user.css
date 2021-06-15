@@ -23,6 +23,13 @@
     top:10px;
     right: 10px;
 }
+.edit-icon
+{
+    position: absolute;
+    cursor: pointer;
+    top:30px;
+    right: 10px;
+}
 .paddingLeftRight20
 {
     padding: 10px 50px;

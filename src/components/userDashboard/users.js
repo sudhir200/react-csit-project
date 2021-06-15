@@ -4,7 +4,7 @@ import {Popconfirm, Tag, Button, Card, Modal, Image, Empty} from "antd";
 import MultipleInput from "./multipleRefsExample";
 import firebase from "firebase";
 import {TestContext} from "../context/testContext";
-import {DeleteOutlined} from "@ant-design/icons"
+import {DeleteOutlined,EditOutlined} from "@ant-design/icons"
 import {database} from "../../config";
 
 class Users extends Component {
@@ -15,7 +15,9 @@ class Users extends Component {
         this.state = {
             users: [],
             loading:false,
-            addUser: false
+            selectedUser: {},
+            addUser: false,
+            mode:null
         }
     }
 
@@ -35,6 +37,8 @@ class Users extends Component {
                 dbUsers.push(res.data())
             })
             this.setState({loading:false,users: dbUsers})
+            this.setState({addUser: false})
+
         })
     }
     updateUser = (res) => {
@@ -62,7 +66,7 @@ class Users extends Component {
             <div>
                 <div className="paddingLeftRight20 space-between">
                     <h2>Users</h2>
-                    <Button onClick={() => this.setState({addUser: true})}>Add User</Button>
+                    <Button onClick={() => this.setState({mode:'add',addUser: true})}>Add User</Button>
                 </div>
                 {users.length && !loading?
                     <div className="userWrapper">
@@ -93,6 +97,10 @@ class Users extends Component {
                                     >
                                       <DeleteOutlined className="delete-icon"/>
                                     </Popconfirm>
+                                    <EditOutlined onClick={()=> {
+                                        this.setState({selectedUser:user,mode:'edit',addUser:true})
+                                    }} className="edit-icon"/>
+
 
 
                                 </div>
@@ -104,9 +112,9 @@ class Users extends Component {
                         }
 
                     </div> : <div align="center"><Empty description="no users found"/></div>}
-                <Modal footer={null} title="Add user" visible={this.state.addUser} onOk={() => console.log('123')}
+                <Modal footer={null} title={this.state.mode==='add'?"Add User":"Edit User"} visible={this.state.addUser} onOk={() => console.log('123')}
                        onCancel={() => this.setState({addUser: false})}>
-                    <MultipleInput addedUser={(res) => this.updateUser(res)} firstName={""} lastName={""} Email={""}/>
+                    <MultipleInput selectedUser={this.state.selectedUser} mode={this.state.mode} updatedUser={()=>this.getAllUsers()}  addedUser={(res) => this.updateUser(res)} firstName={""} lastName={""} Email={""}/>
                 </Modal>
             </div>
         );
