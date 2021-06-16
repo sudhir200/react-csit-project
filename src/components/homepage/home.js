@@ -103,6 +103,10 @@ class Home extends Component {
         return (
 
                         <div>
+                            <div align="center" className="displayGrid">
+                                <Link to={'/class'}>Class Example</Link>
+                                <Link to={'/function'}>Function Example</Link>
+                            </div>
 
                             {/*<ReactPlayer*/}
                             {/*    className='react-player'*/}
