@@ -1,19 +1,34 @@
 import axios from "axios";
 
-export function getCountries() {
-    console.log('api init')
+export function getCountries(retryTimes) {
     return new Promise(function (resolve, reject) {
-        axios({
-            method:"get",
-            url:"https://restcountries.eu/rest/v2/all"
-        }).then(r=> {
-            console.log('api success')
+        axios(
+            {
+                method: "get",
+                url: "https://restcountries.eu/rest/v2/all"
+            }
+        ).then(r => {
             resolve(r)
         })
-            .catch(err=> {
-                console.log('api failed')
+            .catch(err => {
+                if(retryTimes===1)
+                {
+                    console.log('api failed')
+                    reject(err)
+                }
+                else
+                {
+                    getCountries(retryTimes-1).then(res=>
+                        {
+                            resolve(res)
+                        }
+                    ).catch(err=>
+                    {
+                        reject(err)
+                    })
+                }
 
-                reject(err)
+
             })
     })
 }

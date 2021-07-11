@@ -27,6 +27,7 @@ class Login extends Component {
             provider = new firebase.auth.GoogleAuthProvider();
         }
         firebase.auth().signInWithPopup(provider).then(res => {
+            console.log(res)
             eventAnalyst('login','clicked_login','success',`login success for user ${res.additionalUserInfo.profile.id}`)
             this.setState({user: res.additionalUserInfo.profile})
                 localStorage.setItem('userData', JSON.stringify(res.additionalUserInfo.profile))

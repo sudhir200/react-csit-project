@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Card, Tag} from "antd";
+import {Card, message, Tag} from "antd";
 import "./style.css"
 import {HeartFilled, HeartOutlined} from "@ant-design/icons";
 
@@ -25,8 +25,15 @@ class CountryCard extends Component {
     render() {
         return (
             <div>
+                {this.props.array? this.props.array.map((data)=><button onClick={()=>{
+                    if(data==="RAM")
+                    {
+                        message.warn('Ram')
+                    }
+                }}>{data}</button>):''}
                 {this.state.country ?
                     <Card className="countryCard1">
+                        Indvid card
                         {this.state.country.isFavourite?
                             <HeartFilled onClick={()=>this.makeCountryFav()} className='favIcon'/> :
                             <HeartOutlined onClick={()=>this.makeCountryFav()} className='favIcon'/>}

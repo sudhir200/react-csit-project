@@ -22,7 +22,7 @@ class Todo extends Component {
 
 
     componentDidMount() {
-        document.title="To-Do";
+        document.title = "To-Do";
         this.getAllToDoList()
     }
 
@@ -89,7 +89,7 @@ class Todo extends Component {
         e.preventDefault();
         let randomId = randomIdGenerator();
         let database = firebase.firestore();
-        let itemToAdd=this.state.toDoAddItems;
+        let itemToAdd = this.state.toDoAddItems;
         let obj = {
             id: randomId,
             task: itemToAdd.task,
@@ -142,7 +142,7 @@ class Todo extends Component {
                                           checked={item.completed}/>
                             </div>
                             <Divider/>
-                            {item.dueDate?<b>To be completed by {item.dueDate}</b>:''}
+                            {item.dueDate ? <b>To be completed by {item.dueDate}</b> : ''}
                             <Divider/>
                             {item.subTasks && item.subTasks.map((data) => <div className="displayGrid">
                                 <div className={`space-between `}>

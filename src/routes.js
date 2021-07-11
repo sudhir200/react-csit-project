@@ -52,7 +52,7 @@ class Routes extends Component {
                         :
                         <Switch>
                             <Route exact path="/" component={login}/>
-                            <Redirect from="*" to="/*"/>
+                            <Redirect from="*" to="/"/>
                         </Switch>
                     }
                 </Router>

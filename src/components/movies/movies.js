@@ -1,25 +1,12 @@
 import React, {Component} from 'react';
 import {getSingleMovie, getYtsMovies} from "../../apicall/movies";
-import {
-    BackTop,
-    Button,
-    Empty,
-    Input,
-    message,
-    Modal,
-    Pagination,
-    Rate,
-    Skeleton,
-    Tag,
-    Tooltip,
-    Typography
-} from "antd";
+import {BackTop, Button, Empty, Input, message, Modal, Pagination, Skeleton, Tag, Tooltip, Typography} from "antd";
 import "./movies.css"
 import "./style.css"
 import {CheckCircleOutlined, DownloadOutlined, EyeOutlined, UpCircleFilled} from "@ant-design/icons"
 import YouTubePlayer from "react-player/youtube";
 
-const genres = [ 'mystery', 'thriller', 'drama', 'sci-fi', 'animation', 'horror', 'comedy','biography', 'action', 'fantasy']
+const genres = ['mystery', 'thriller', 'drama', 'sci-fi', 'animation', 'horror', 'comedy', 'biography', 'action', 'fantasy']
 
 const {Title, Paragraph} = Typography;
 const {Search} = Input;
@@ -36,7 +23,7 @@ class Movies extends Component {
     }
 
     componentDidMount() {
-        document.title="Movies";
+        document.title = "Movies";
         genres.forEach((genre) => {
             this.getMoviesList(genre, 1, '', 8);
         })
@@ -50,8 +37,7 @@ class Movies extends Component {
             this.state.moviesList.set(genre, res)
             this.state.loading.set(genre, false)
             this.setState({loading: this.state.loading, moviesList: this.state.moviesList})
-        }).catch(err=>
-        {
+        }).catch(err => {
             message.warn(`could not fetch movies for ${genre}`)
         })
     }
@@ -83,7 +69,8 @@ class Movies extends Component {
 
                         <div className="titleWrapper space-between">
                             <Title level={2}>{genre.toUpperCase()}</Title>
-                            <Search className="movieSearchInput" allowClear style={{width: "25%"}} placeholder={`search movies in ${genre}`}
+                            <Search className="movieSearchInput" allowClear style={{width: "25%"}}
+                                    placeholder={`search movies in ${genre}`}
                                     onSearch={(searchTxt) => {
                                         this.getMoviesList(genre, 1, searchTxt, 20)
                                     }} enterButton/>
@@ -97,13 +84,14 @@ class Movies extends Component {
                         <div className="grid-container">
                             {loading.get(genre) ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(item => (
                                 <Skeleton active={true}/>)) : ''}
-                            {moviesList.get(genre) && moviesList.get(genre).movie_count && !loading.get(genre) ? moviesList.get(genre).movies.filter(movie => movie.large_cover_image).map(
+                            {moviesList.get(genre) && moviesList.get(genre).movie_count && !loading.get(genre) ? moviesList.get(genre).movies.filter(movie => movie.large_cover_image ||movie.background_image || movie.medium_cover_image).map(
                                 (movie) =>
                                     <div>
-                                        <div className="movie-card" >
-                                            <img draggable={false} alt={""} className="movie-img" src={movie.medium_cover_image}/>
+                                        <div className="movie-card">
+                                            <img draggable={false} alt={movie.title} className="movie-img" src={movie.large_cover_image}/>
                                             <div className="movie-infos movie-info-wrapper">
-                                                <Title level={4} style={{color:"#ffffff"}}  ellipsis={{rows: 1, tooltip: true}} >{movie.title}</Title><br/>
+                                                <Title level={4} style={{color: "#ffffff"}}
+                                                       ellipsis={{rows: 1, tooltip: true}}>{movie.title}</Title><br/>
                                                 {'Rating: ' + movie.rating}
                                                 <div className="movie-title">{movie.year}</div>
                                                 <Paragraph ellipsis={{rows: 2, tooltip: true, symbol: 'more'}}
@@ -128,12 +116,17 @@ class Movies extends Component {
                                                                 <div>Seeds: {item.seeds}</div>
                                                                 <div>Size: {item.size}</div>
                                                                 <div>Quality: {item.quality}</div>
-                                                                <div>Magnet link:<a href={`magnet:?xt=urn:btih:${item.hash}`}> <EyeOutlined /></a></div>
+                                                                <div>Magnet link:<a
+                                                                    href={`magnet:?xt=urn:btih:${item.hash}`}>
+                                                                    <EyeOutlined/></a></div>
                                                             </div>}>
                                                                 <a href={item.url}
-                                                                   color="black"><Button
-                                                                    type="primary" style={{marginRight: 10}}
-                                                                    shape="round">Link {index + 1}<DownloadOutlined/></Button></a>
+                                                                   color="black">
+                                                                    <Button
+                                                                        disabled={item.seeds<=10}
+                                                                        type="primary" style={{marginRight: 10}}
+                                                                        shape="round">Link {index + 1}<DownloadOutlined/>
+                                                                    </Button></a>
                                                             </Tooltip>
                                                         )}
                                                     </div>

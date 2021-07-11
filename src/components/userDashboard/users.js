@@ -33,9 +33,9 @@ class Users extends Component {
 
         database.collection('users').get().then((res) => {
             res.forEach(res => {
-                console.log(res.data())
                 dbUsers.push(res.data())
             })
+            console.log(dbUsers)
             this.setState({loading:false,users: dbUsers})
             this.setState({addUser: false})
 
@@ -70,7 +70,6 @@ class Users extends Component {
                 </div>
                 {users.length && !loading?
                     <div className="userWrapper">
-
                         {users.map((user) =>
                             <div className="userCard">
                                 <div className="space-bwtn">

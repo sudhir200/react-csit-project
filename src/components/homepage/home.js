@@ -30,6 +30,8 @@ class Home extends Component {
     }
 
     handleChange = (event) => {
+        console.log(event.target.name)
+        console.log(event.target.value)
         this.setState({[event.target.name]: event.target.value});
         if (event.target.value === "") {
             this.setState({searchCountries: []})
@@ -37,22 +39,18 @@ class Home extends Component {
     }
     getAllCountries = () => {
 
-        console.log('getAllCountries...')
         this.setState({loading:true})
         eventAnalyst('countries','fetch_countries','initiated',``)
-
         if(!this.state.countries.length>0)
         {
             getCountries().then(r => {
-                console.log('success...')
-
-                console.log(r)
                 localStorage.setItem('countries-list',JSON.stringify(r.data))
                 this.setState({countries: r.data})
-                eventAnalyst('countries','fetch_countries_success','initiated',`fetch countries success`)
+                eventAnalyst('countries','fetch_countries_success','completed',`fetch countries success`)
 
             }).catch(err => {
                 console.log('error...')
+                eventAnalyst('countries','fetch_countries_failed','completed',`fetch countries failed`)
 
                 message.error('Error')
                 console.log(err)
@@ -155,7 +153,7 @@ class Home extends Component {
                             {/*</div>*/}
 
                             {countries.filter((country)=>this.state.searchKey && !country.isFavourite?country.name.toUpperCase().includes(this.state.searchKey.toUpperCase()):!country.isFavourite).map((country,index)=>
-                                <CountryCard updateCountry={()=>this.updateList()} key={index} country={country}/>)
+                                <CountryCard array={country.name.charAt(0)==='N'?this.state.customArray:[]}  updateCountry={()=>this.updateList()} key={index} country={country}/>)
                             }
 
                             {/*filter(country => this.state.searchKey?country.name.toUpperCase().includes(this.state.searchKey.toUpperCase()):country)*/}

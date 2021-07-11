@@ -21,7 +21,9 @@ class ClassExample extends Component {
             state2: 'value2',
             state3: false,
             state4: {},
-            countries: []
+            countries: [],
+            mapExample: new Map(),
+            exampleArray: [{roll:'1',name:'Ram',isAdmin:true},{roll:'2',name:'Shyam',isAdmin:false}]
         }
     }
 
@@ -68,22 +70,32 @@ class ClassExample extends Component {
     }
 
     render() {
-        const {state1, state2, state3, state4, countries} = this.state;
+        const {state1,mapExample, exampleArray, state2, state3, state4, countries} = this.state;
         return (
             <div align="center">
+                {exampleArray.map((item,index) =>
+                    <div>
+                        <button onClick={()=> {
+                            mapExample.set(item.roll, item.name)
+                            this.setState({mapExample:mapExample})
+                        }}>
+                           Click me {item.name}
+                        </button>
+                        <h2>{JSON.stringify(mapExample.get(item.roll))}</h2>
+                    </div>)}
                 Class Example<br/>
                 {this.state.state1}<br/>
                 {this.state.state2}<br/>
                 {state1}<br/>
                 {state2}<br/>
                 {state3 ? 'true' : 'false'}<br/>
-                <form onSubmit={(e)=>this.handleClick(e)}>
-                    {this.inputElem('name', '1', state4.name,true)}
-                    {this.inputElem('roll_no', '2', state4.roll_no,true)}
-                    {this.inputElem('phone', '3', state4.phone,true)}
-                    {this.inputElem('email', '4', state4.email,false)}
-                    {this.inputElem('address', '5', state4.address,false)}
-                    <button style={{background: !state3 ? 'red' : 'green'}} type="submit" >click</button>
+                <form onSubmit={(e) => this.handleClick(e)}>
+                    {this.inputElem('name', '1', state4.name, true)}
+                    {this.inputElem('roll_no', '2', state4.roll_no, true)}
+                    {this.inputElem('phone', '3', state4.phone, true)}
+                    {this.inputElem('email', '4', state4.email, false)}
+                    {this.inputElem('address', '5', state4.address, false)}
+                    <button style={{background: !state3 ? 'red' : 'green'}} type="submit">click</button>
                 </form>
 
                 <Divider/>
