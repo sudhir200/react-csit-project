@@ -33,7 +33,6 @@ class CountryCard extends Component {
                 }}>{data}</button>):''}
                 {this.state.country ?
                     <Card className="countryCard1">
-                        Indvid card
                         {this.state.country.isFavourite?
                             <HeartFilled onClick={()=>this.makeCountryFav()} className='favIcon'/> :
                             <HeartOutlined onClick={()=>this.makeCountryFav()} className='favIcon'/>}

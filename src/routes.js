@@ -14,6 +14,7 @@ import login from "./components/login/login";
 import Todo from "./components/todo/todo";
 import ClassExample from "./components/Class/classExample";
 import FunctionExample from "./components/Function/functionExample";
+import Corona from "./components/corona/corona";
 
 class Routes extends Component {
     constructor(props, context) {
@@ -35,13 +36,13 @@ class Routes extends Component {
 
                     {this.props.isLogin ?
                         <Switch>
-
                             <Route exact path="/" component={Home}/>
                             <Route exact path="/about" component={About}/>
                             <Route exact path="/class" component={ClassExample}/>
                             <Route exact path="/function" component={FunctionExample}/>
                             <Route exact path="/movies" component={Movies}/>
                             <Route exact path="/users" component={Users}/>
+                            <Route exact path="/corona" component={Corona}/>
                             <Route exact path="/user/add" component={UserAdd}/>
                             <Route exact path="/country/:name" component={GetCountryByName}/>
                             <Route exact path="/user/:userId/course/:courseId" component={Users}/>

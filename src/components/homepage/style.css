@@ -12,6 +12,10 @@
     display: block;
     text-align: center;
 }
+.test-class
+{
+    font-size: 2rem;
+}
 .searchInput
 {
     outline: none !important;

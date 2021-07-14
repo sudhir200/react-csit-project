@@ -62,6 +62,8 @@ class Header1 extends Component {
                             className="titleText item">TO-DO list</span> </Link>
                         <Link style={{textDecoration: "none"}} to={"/about"}><span
                             className="titleText item">About</span> </Link>
+                        <Link style={{textDecoration: "none"}} to={"/corona"}><span
+                            className="titleText item">Corona</span> </Link>
                     </div>
                     <div style={{paddingTop: 30, marginRight: 10}}>
 
